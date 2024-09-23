@@ -86,6 +86,7 @@ const Header = () => {
       <div className="p-3 lg:hidden">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
+          <div className="flex gap-2 items-center">
           <Link to="/" className="z-20">
             <img src={logo} alt="Logo" className="w-12 h-12" />
           </Link>
@@ -93,8 +94,9 @@ const Header = () => {
           <img
             src="https://www.rci.com/static/images/content/header/RCI-ClubWyndham-new.png"
             alt=""
-            className="w-20 h-10"
+            className="w-20 "
           />
+          </div>
 
           {/* Mobile Dropdown */}
           <div className="relative z-10">
