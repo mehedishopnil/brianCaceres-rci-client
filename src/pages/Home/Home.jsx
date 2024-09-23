@@ -1,5 +1,5 @@
 import { IoSearch } from "react-icons/io5";
-import rciImg2 from "../../assets/Images/rci-magazine-people-places.jpg";
+import rciImg2 from "../../assets/images/rci-magazine-people-places.jpg";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 const Home = () => {
