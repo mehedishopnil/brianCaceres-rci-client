@@ -1,41 +1,39 @@
 import { createContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import app from "../Firebase/firebase.config";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth/web-extension"; 
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signOut as firebaseSignOut, signInWithPopup  } from "firebase/auth";
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null); 
-  const [resortData, setResortData] = useState([]); 
+  const [user, setUser] = useState(null);
+  const [resortData, setResortData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [allResortData, setAllResortData] = useState([]);
+  const [allBookingsData, setAllBookingsData] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [allUsersData, setAllUsersData] = useState([]);
   const [bookingsData, setBookingsData] = useState([]);
-
+  const [allUsersData, setAllUsersData] = useState([]);
+  const [paymentInfoData, setPaymentInfoData] = useState({});
+  const [role, setRole] = useState(null);
 
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
 
   const ITEMS_PER_PAGE = 15; // Number of items per page
 
-  // Fetch exactly 30 resort data entries
-  const fetchResortData = async () => {
+   // Fetch exactly 30 resort data entries
+   const fetchResortData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://brian-caceres-rci-server.vercel.app/resorts?limit=30`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=50`, {
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Error fetching resort data: ${response.status} ${response.statusText}`
-        );
+        throw new Error(`Error fetching resort data: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -66,6 +64,7 @@ const AuthProvider = ({ children }) => {
 
   // Paginate data client-side
   const paginate = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return;
     const startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedData = resortData.slice(startIndex, endIndex);
@@ -86,46 +85,35 @@ const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setLoading(true);
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const signedInUser = userCredential.user;
 
     // Fetch specific user data from backend based on email
     const userDataResponse = await fetch(
-      `https://rci-last-call-server.vercel.app/users?email=${email}`
+      `${import.meta.env.VITE_API_Link}/users?email=${email}`
     );
     if (!userDataResponse.ok) {
       throw new Error("Failed to fetch user data from backend");
     }
 
     const userData = await userDataResponse.json();
-    setUser(userData[0]); // Set user state with fetched userData
-
-    console.log("User signed in and data fetched:", signedInUser, userData);
+    setUser(userData[0]);
 
     // Show success alert
     Swal.fire({
       title: "Successfully Signed In",
-      showClass: {
-        popup: "animate__animated animate__fadeInUp animate__faster",
-      },
-      hideClass: {
-        popup: "animate__animated animate__fadeOutDown animate__faster",
-      },
+      showClass: { popup: "animate__animated animate__fadeInUp animate__faster" },
+      hideClass: { popup: "animate__animated animate__fadeOutDown animate__faster" },
     });
 
-    return userCredential; // Return the userCredential
+    return userCredential;
   } catch (error) {
     console.error("Error signing in:", error.message);
-    throw error; // Throw the error to handle it in the SignIn component
+    throw error;
   } finally {
     setLoading(false);
   }
 };
-
 
 
 
@@ -135,7 +123,7 @@ const login = async (email, password) => {
     try {
       // Check if user already exists in the backend
       const userExistsResponse = await fetch(
-        `https://rci-last-call-server.vercel.app/users?email=${email}`
+        `${import.meta.env.VITE_API_Link}/users?email=${email}`
       );
 
       if (userExistsResponse.status === 404) {
@@ -164,7 +152,7 @@ const login = async (email, password) => {
 
       // Send user data to backend
       const backendResponse = await fetch(
-        "https://rci-last-call-server.vercel.app/users",
+        "${import.meta.env.VITE_API_Link}/users",
         {
           method: "POST",
           headers: {
@@ -194,7 +182,7 @@ const login = async (email, password) => {
 
       // Fetch specific user data from backend based on email
       const userDataResponse = await fetch(
-        `https://rci-last-call-server.vercel.app/users?email=${email}`
+        `${import.meta.env.VITE_API_Link}/users?email=${email}`
       );
       if (!userDataResponse.ok) {
         throw new Error("Failed to fetch user data from backend");
@@ -216,7 +204,7 @@ const login = async (email, password) => {
     try {
       console.log("Fetching all users data...");
       const response = await fetch(
-        "https://rci-last-call-server.vercel.app/all-users"
+        "${import.meta.env.VITE_API_Link}/all-users"
       );
       if (!response.ok) {
         throw new Error(
@@ -235,7 +223,7 @@ const login = async (email, password) => {
   const updateUser = async (email, isAdmin) => {
     try {
       const response = await fetch(
-        `https://rci-last-call-server.vercel.app/update-user`,
+        `${import.meta.env.VITE_API_Link}/update-user`,
         {
           method: "PATCH",
           headers: {
@@ -279,7 +267,7 @@ const googleLogin = async () => {
 
     // Check if the user already exists in the backend
     const userExistsResponse = await fetch(
-      `https://rci-last-call-server.vercel.app/users?email=${user.email}`
+      `${import.meta.env.VITE_API_Link}/users?email=${user.email}`
     );
 
     if (userExistsResponse.status === 404) {
@@ -287,7 +275,7 @@ const googleLogin = async () => {
 
       // User does not exist, send user data to backend
       const backendResponse = await fetch(
-        "https://rci-last-call-server.vercel.app/users",
+        "${import.meta.env.VITE_API_Link}/users",
         {
           method: "POST",
           headers: {
@@ -351,7 +339,6 @@ const googleLogin = async () => {
 };
 
 
-
 // Sign out process
 const signOut = async () => {
   setLoading(true);
@@ -372,13 +359,23 @@ const signOut = async () => {
   const authInfo = {
     loading,
     user,
+    updateUser,
+    role,
+    login,
+    googleLogin,
+    signOut,
+    createUser,
+    setLoading,
     resortData,
     filteredData,
+    allResortData,
     totalPages,
     currentPage,
-    allUsersData,
+    fetchResortData,
     bookingsData,
-    paginate,
+    allBookingsData,
+    allUsersData,
+    paymentInfoData,
   };
 
   return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
