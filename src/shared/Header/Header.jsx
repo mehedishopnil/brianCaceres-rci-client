@@ -112,19 +112,19 @@ const Header = () => {
             </button>
             {isMenuOpen && (
               <ul className="absolute right-0 mt-5 w-48 bg-white shadow-lg rounded-lg py-2">
-                <li className="px-5 py-2 hover:bg-gray-100">
-                  <Link to="/lastCallVacation" onClick={closeMenu} className="flex items-center text-lg gap-2">
+                <li className="px-5 py-2 space-y-2 ">
+                  <Link to="/lastCallVacation" onClick={closeMenu} className="flex items-center text-lg gap-2 p-1 rounded hover:bg-gray-100">
                   <img src="https://www.rci.com/static/images/content/icons-header/book.svg" alt="" />
                     <h1>BOOK</h1>
                   </Link>
 
-                  <Link to="/login" onClick={closeMenu} className="flex items-center text-lg gap-2">
+                  <Link to="/login" onClick={closeMenu} className="flex items-center text-lg gap-2 p-1 rounded hover:bg-gray-100">
                   <RiLoginBoxLine />
                     <h1>Login</h1>
                   </Link>
 
 
-                  <Link to="/registration" onClick={closeMenu} className="flex items-center text-lg gap-2">
+                  <Link to="/registration" onClick={closeMenu} className="flex items-center text-lg gap-2 p-1 rounded hover:bg-gray-100">
                   <FaRegIdBadge />
                     <h1>Registration</h1>
                   </Link>
