@@ -19,16 +19,18 @@ const AuthProvider = ({ children }) => {
   const [paymentInfoData, setPaymentInfoData] = useState({});
   const [role, setRole] = useState(null);
 
+
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
 
   const ITEMS_PER_PAGE = 15; // Number of items per page
+ 
 
    // Fetch exactly 30 resort data entries
    const fetchResortData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=50`, {
+      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=40`, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -77,6 +79,36 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     fetchResortData();
   }, []);
+
+
+
+//Fetch all resorts data:
+  const fetchAllResorts = async () => {
+    setLoading(true);
+    try {
+      const url = `${import.meta.env.VITE_API_Link}/all-resorts`;
+      console.log("Fetching from URL:", url); // Add this line
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching all resort data: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      setAllResortData(data);
+    } catch (error) {
+      console.error("Error fetching all resort data:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+// Fetch all resort data when the component mounts
+useEffect(() => {
+  fetchAllResorts();
+}, []);
+
 
 
 

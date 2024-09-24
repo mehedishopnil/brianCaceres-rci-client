@@ -4,6 +4,8 @@ import LastCallVacations from "../pages/LastCallVacations/LastCallVacations";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Registration from "../pages/Registration/Registration";
+import SingleResortPage from "../components/SingleResortPage/SingleResortPage";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 
 export const router = createBrowserRouter([
@@ -16,8 +18,12 @@ export const router = createBrowserRouter([
                     element: <Home/>
                },
                {
-                    path: "/lastCallVacation",
+                    path: "lastCallVacation",
                     element: <LastCallVacations/>
+               },
+               {
+                    path: "singleResortPage/:id",
+                    element: <SingleResortPage/>
                },
                {
                     path: "login",
@@ -26,6 +32,11 @@ export const router = createBrowserRouter([
                {
                     path: "registration",
                     element: <Registration/>
+               },
+               {
+                    path: "*",
+                    element: <ErrorPage/>
+ 
                }
           ]
      }
