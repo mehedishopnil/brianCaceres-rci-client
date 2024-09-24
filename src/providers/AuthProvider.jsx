@@ -23,8 +23,8 @@ const AuthProvider = ({ children }) => {
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
 
-  const ITEMS_PER_PAGE = 15; // Number of items per page
- 
+  const ITEMS_PER_PAGE = 15; 
+
 
    // Fetch exactly 30 resort data entries
    const fetchResortData = async () => {
@@ -236,7 +236,7 @@ const login = async (email, password) => {
     try {
       console.log("Fetching all users data...");
       const response = await fetch(
-        "${import.meta.env.VITE_API_Link}/all-users"
+        `${import.meta.env.VITE_API_Link}/all-users`
       );
       if (!response.ok) {
         throw new Error(
@@ -251,6 +251,7 @@ const login = async (email, password) => {
       setLoading(false);
     }
   };
+
 
   const updateUser = async (email, isAdmin) => {
     try {
@@ -287,6 +288,10 @@ const login = async (email, password) => {
       console.error("Error updating user role:", error.message);
     }
   };
+
+  useEffect(() => {
+    fetchAllUsersData();
+  }, []);
 
 
 
@@ -377,7 +382,7 @@ const signOut = async () => {
   try {
     await firebaseSignOut(auth);
     setUser(null);
-    setBookingsData([]); // Clear bookings data on sign out
+    setBookingsData([]);
     console.log("User signed out");
   } catch (error) {
     console.error("Error signing out:", error.message);
