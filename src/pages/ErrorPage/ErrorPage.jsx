@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import errorImg from "../../assets/images/404_error_img.jpg"
 
 const ErrorPage = () => {
   return (
@@ -7,10 +8,11 @@ const ErrorPage = () => {
         
         <div className="">
           <img
-            src="https://admiral.digital/wp-content/uploads/2023/08/404_page-not-found.png"
+            src={errorImg}
             alt="Not Found Illustration"
             className="mx-auto w-full h-64 object-contain"
           />
+          <h1 className="text-xl font-semibold my-4">The Page Not Found!</h1>
         </div>
 
         <Link to="/">

@@ -6,6 +6,7 @@ import { GiStarsStack } from "react-icons/gi";
 import Loading from "../Loading";
 import { AuthContext } from "../../providers/AuthProvider";
 import TopAmenities from "./TopAmenities/TopAmenities";
+import FilterContent from "./FilterContent/FilterContent";
 
 const SingleResortPage = () => {
   const { allResortData } = useContext(AuthContext);
@@ -184,13 +185,13 @@ const SingleResortPage = () => {
           </div>
         </div>
 
-        {/* <FilterContent currentResort={currentResort} /> */}
+        <FilterContent currentResort={currentResort} />
 
-        {/* <div className="flex justify-center gap-5">
+        <div className="flex justify-center gap-5">
           <button onClick={handleAddToCheckout} className="border-2 border-[#21509642] rounded bg-[#c8ebff] hover:bg-[#7bceff] font-bold p-3">
             Add to Checkout
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );
