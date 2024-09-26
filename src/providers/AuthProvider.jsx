@@ -25,7 +25,6 @@ const AuthProvider = ({ children }) => {
 
   const ITEMS_PER_PAGE = 15; 
 
-  console.log(user)
 
 
   // Add the onAuthStateChanged useEffect here
