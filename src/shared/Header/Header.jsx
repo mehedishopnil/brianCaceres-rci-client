@@ -31,6 +31,8 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  console.log(user)
+
   return (
     <div className="bg-[#037092]">
       {/* Desktop Navbar */}

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import app from "../Firebase/firebase.config";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signOut as firebaseSignOut, signInWithPopup  } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signOut as firebaseSignOut, signInWithPopup, onAuthStateChanged   } from "firebase/auth";
 
 export const AuthContext = createContext();
 
@@ -25,93 +25,40 @@ const AuthProvider = ({ children }) => {
 
   const ITEMS_PER_PAGE = 15; 
 
+  console.log(user)
 
-   // Fetch exactly 30 resort data entries
-   const fetchResortData = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=40`, {
-        headers: { "Content-Type": "application/json" },
-      });
 
-      if (!response.ok) {
-        throw new Error(`Error fetching resort data: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const resorts = data.resorts || [];
-
-      if (resorts.length > 0) {
-        setResortData(resorts);
-
-        // Calculate total pages based on 15 items per page
-        const pages = Math.ceil(resorts.length / ITEMS_PER_PAGE);
-        setTotalPages(pages);
-
-        // Set the initial paginated data for the first page
-        const firstPageData = resorts.slice(0, ITEMS_PER_PAGE);
-        setFilteredData(firstPageData);
-      }
-    } catch (error) {
-      console.error("Error fetching resort data:", error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: `Failed to fetch resort data: ${error.message}`,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Paginate data client-side
-  const paginate = (pageNumber) => {
-    if (pageNumber < 1 || pageNumber > totalPages) return;
-    const startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const paginatedData = resortData.slice(startIndex, endIndex);
-
-    setFilteredData(paginatedData);
-    setCurrentPage(pageNumber);
-  };
-
-  // Fetch resort data when the component mounts
+  // Add the onAuthStateChanged useEffect here
   useEffect(() => {
-    fetchResortData();
-  }, []);
-
-
-
-//Fetch all resorts data:
-  const fetchAllResorts = async () => {
-    setLoading(true);
-    try {
-      const url = `${import.meta.env.VITE_API_Link}/all-resorts`;
-      console.log("Fetching from URL:", url); // Add this line
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`Error fetching all resort data: ${response.status} ${response.statusText}`);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        // Fetch specific user data from the backend
+        fetch(`${import.meta.env.VITE_API_Link}/users?email=${currentUser.email}`)
+          .then(async (res) => {
+            if (!res.ok) {
+              const responseText = await res.text();
+              console.error(`Error fetching user: ${responseText}, Status: ${res.status}`);
+              if (res.status === 404) {
+                setUser(null); // User not found
+              } else {
+                throw new Error(`Unexpected response: ${res.status}`);
+              }
+            }
+            return res.json();
+          })
+          .then((userData) => {
+            setUser(userData);  // Update state with backend user data
+          })
+          .catch((error) => console.error("Failed to fetch user data:", error));
+      } else {
+        setUser(null);
       }
-      
-      const data = await response.json();
-      
-      setAllResortData(data);
-    } catch (error) {
-      console.error("Error fetching all resort data:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    });
   
-// Fetch all resort data when the component mounts
-useEffect(() => {
-  fetchAllResorts();
-}, []);
-
-
-
-
+    return () => unsubscribe();  // Cleanup the listener on unmount
+  }, [auth]);
+  
+  
 
 // SignIn process (with email and password)
 const login = async (email, password) => {
@@ -129,7 +76,12 @@ const login = async (email, password) => {
     }
 
     const userData = await userDataResponse.json();
-    setUser(userData[0]);
+    if (userData.length > 0) {
+      setUser(userData[0]);
+    } else {
+      console.error("No user data found for the email:", email);
+    }    
+    
 
     // Show success alert
     Swal.fire({
@@ -184,7 +136,7 @@ const login = async (email, password) => {
 
       // Send user data to backend
       const backendResponse = await fetch(
-        "${import.meta.env.VITE_API_Link}/users",
+        `${import.meta.env.VITE_API_Link}/users`,
         {
           method: "POST",
           headers: {
@@ -220,7 +172,13 @@ const login = async (email, password) => {
         throw new Error("Failed to fetch user data from backend");
       }
       const userData = await userDataResponse.json();
-      setUser(userData[0]); // Set user state with fetched userData
+      
+      if (userData.length > 0) {
+        setUser(userData[0]);
+      } else {
+        console.error("No user data found after registration for email:", email);
+      }
+      
       return userCredential;
     } catch (error) {
       console.error("Error creating user:", error.message);
@@ -301,6 +259,7 @@ const googleLogin = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
+    console.log(user.email)
 
     // Check if the user already exists in the backend
     const userExistsResponse = await fetch(
@@ -312,7 +271,7 @@ const googleLogin = async () => {
 
       // User does not exist, send user data to backend
       const backendResponse = await fetch(
-        "${import.meta.env.VITE_API_Link}/users",
+        `${import.meta.env.VITE_API_Link}/users`,
         {
           method: "POST",
           headers: {
@@ -344,6 +303,7 @@ const googleLogin = async () => {
       setUser(newUser);
 
       console.log("New user signed up with Google:", user);
+
     } else if (userExistsResponse.ok) {
       const userExistsData = await userExistsResponse.json();
 
@@ -390,6 +350,92 @@ const signOut = async () => {
     setLoading(false);
   }
 };
+
+
+
+
+
+ // Fetch exactly 30 resort data entries
+   const fetchResortData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=40`, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching resort data: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const resorts = data.resorts || [];
+
+      if (resorts.length > 0) {
+        setResortData(resorts);
+
+        // Calculate total pages based on 15 items per page
+        const pages = Math.ceil(resorts.length / ITEMS_PER_PAGE);
+        setTotalPages(pages);
+
+        // Set the initial paginated data for the first page
+        const firstPageData = resorts.slice(0, ITEMS_PER_PAGE);
+        setFilteredData(firstPageData);
+      }
+    } catch (error) {
+      console.error("Error fetching resort data:", error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `Failed to fetch resort data: ${error.message}`,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Paginate data client-side
+  const paginate = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return;
+    const startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedData = resortData.slice(startIndex, endIndex);
+
+    setFilteredData(paginatedData);
+    setCurrentPage(pageNumber);
+  };
+
+  // Fetch resort data when the component mounts
+  useEffect(() => {
+    fetchResortData();
+  }, []);
+
+
+
+//Fetch all resorts data:
+  const fetchAllResorts = async () => {
+    setLoading(true);
+    try {
+      const url = `${import.meta.env.VITE_API_Link}/all-resorts`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching all resort data: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      setAllResortData(data);
+    } catch (error) {
+      console.error("Error fetching all resort data:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+// Fetch all resort data when the component mounts
+useEffect(() => {
+  fetchAllResorts();
+}, []);
 
 
 
