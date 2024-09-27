@@ -7,6 +7,8 @@ import Registration from "../pages/Registration/Registration";
 import SingleResortPage from "../components/SingleResortPage/SingleResortPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Profile from "../pages/Profile/Profile";
+import Dashboard from "../layout/Dashboard/Dashboard";
+import Overview from "../pages/Overview/Overview";
 
 
 export const router = createBrowserRouter([
@@ -44,5 +46,16 @@ export const router = createBrowserRouter([
  
                }
           ]
-     }
+     },
+
+
+     // Dashboard Part
+  {
+     path: "dashboard",
+     element: <Dashboard />,
+     children: [
+       { path: "overview", element: <Overview /> },
+     //   { path: "my-bookings", element: <MyBookings /> }
+     ],
+   },
 ])
