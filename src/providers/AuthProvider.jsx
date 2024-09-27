@@ -56,6 +56,28 @@ const AuthProvider = ({ children }) => {
   
     return () => unsubscribe();  // Cleanup the listener on unmount
   }, [auth]);
+
+
+  // Set User Role
+  const setUserRole = async (email) => {
+    try {
+      const response = await fetch(
+        `https://rci-last-call-server.vercel.app/users?email=${email}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data from backend");
+      }
+      const userData = await response.json();
+      if (userData.isAdmin) {
+        setRole("admin");
+      } else {
+        setRole("user");
+      }
+    } catch (error) {
+      console.error("Error setting user role:", error.message);
+    }
+  };
+
   
   
 
@@ -358,7 +380,7 @@ const signOut = async () => {
    const fetchResortData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=40`, {
+      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=50`, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -434,6 +456,54 @@ const signOut = async () => {
 // Fetch all resort data when the component mounts
 useEffect(() => {
   fetchAllResorts();
+}, []);
+
+
+ // Effect to listen for auth state changes
+ useEffect(() => {
+  fetchResortData();
+  fetchAllResorts();
+  // fetchAllBookingsData();
+  fetchAllUsersData();
+
+  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      // Fetch user data from backend based on email
+      const fetchUserData = async () => {
+        try {
+          const userDataResponse = await fetch(
+            `${import.meta.env.VITE_API_Link}/users?email=${currentUser.email}`
+          );
+          if (!userDataResponse.ok) {
+            throw new Error("Failed to fetch user data from backend");
+          }
+          const userData = await userDataResponse.json();
+          setUser(userData); // Set user state with fetched userData
+
+          // Set user role based on isAdmin flag
+          await setUserRole(currentUser.email);
+
+          // Fetch bookings data for the current user
+          // await fetchBookingsData(currentUser.email);
+          // await fetchPaymentInformation(currentUser.email);
+        } catch (error) {
+          console.error("Error fetching user data:", error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    } else {
+      setUser(null);
+      setRole(null); // Clear role on sign out
+      setBookingsData([]);
+      setPaymentInfoData([]);
+      setLoading(false);
+    }
+  });
+
+  return () => unsubscribe();
 }, []);
 
 

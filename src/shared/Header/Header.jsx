@@ -31,7 +31,7 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
-  
+  console.log(role)
 
   return (
     <div className="bg-[#037092]">
