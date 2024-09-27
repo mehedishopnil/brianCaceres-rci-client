@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
+import AvailableUnits from "./FilteredComponent/AvailableUnits";
+import RoomDetails from "./FilteredComponent/RoomDetails";
+import ResortDetails from "./FilteredComponent/ResortDetails";
 
 
 const FilterContent = ({ currentResort }) => {
@@ -28,21 +31,20 @@ const FilterContent = ({ currentResort }) => {
 
   // Demo content for each menu
   const menuContent = {
-    "Available Units": <h1>Available Unites</h1>,
-//     <AvailableUnits 
-//     currentResort = {currentResort}
-//      />,
+    "Available Units": 
+    <AvailableUnits 
+    currentResort = {currentResort}
+     />,
 
 
     // "All-inclusive info": <AllInclusiveInfo />,
 
-    "Room Details": <h1>Room Details</h1>,
-//     <RoomDetails room_details={room_details} />,
+    "Room Details": 
+    <RoomDetails room_details={room_details} />,
 
     "Resort Details": (
       <div>
-          <h1>Resort Details</h1>
-        {/* <ResortDetails resort_details = {resort_details} check_in_time = {check_in_time} check_out_time = {check_out_time} /> */}
+        <ResortDetails resort_details = {resort_details} check_in_time = {check_in_time} check_out_time = {check_out_time} />
       </div>
     ),
 
