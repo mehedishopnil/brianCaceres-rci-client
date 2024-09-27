@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useContext } from "react";
 import AvailableUnits from "./FilteredComponent/AvailableUnits";
 import RoomDetails from "./FilteredComponent/RoomDetails";
 import ResortDetails from "./FilteredComponent/ResortDetails";
+import AreaInfo from "./FilteredComponent/AreaInfo";
+import Reviews from "./FilteredComponent/Reviews";
 
 
 const FilterContent = ({ currentResort }) => {
@@ -50,15 +52,12 @@ const FilterContent = ({ currentResort }) => {
 
     "Area info": (
       <div>
-          <h1>Area Info</h1>
-        {/* <AreaInfo place_name={place_name} location={location} /> */}
+        <AreaInfo place_name={place_name} location={location} />
       </div>
     ),
     Reviews: (
       <div>
-          <h1>Reviews</h1>
-        {/* <Reviews reviews_amount={reviews_amount} rating={rating}/> */}
-        {/* <Reviews reviews_amount={reviews_amount} rating={rating}/> */}
+        <Reviews reviews_amount={reviews_amount} rating={rating}/>
       </div>
     ),
   };
