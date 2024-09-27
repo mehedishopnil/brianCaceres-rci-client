@@ -380,7 +380,7 @@ const signOut = async () => {
    const fetchResortData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=50`, {
+      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=60`, {
         headers: { "Content-Type": "application/json" },
       });
 
