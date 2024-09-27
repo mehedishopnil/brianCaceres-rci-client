@@ -21,7 +21,7 @@ const AvailableUnits = ({ currentResort }) => {
       </p>
 
 
-{/* RCI Points Vacations */}
+{/* RCI Points Vacations
       <div className="border-[1px] rounded my-10 py-5 shadow-gray-200 shadow-md">
         <Link
           to="/single-available-unit"
@@ -35,9 +35,9 @@ const AvailableUnits = ({ currentResort }) => {
             <h1 className="text-2xl font-semibold text-[#037092] my-3">RCI Points Vacations</h1>
           </div>
         </Link>
-      </div>
+      </div> */}
 
-{/* Extra Vacation Getaways */}
+{/* Extra Vacation Getaways
       <div className="border-[1px] rounded my-10 py-5 shadow-gray-200 shadow-md">
         <Link
           to="/single-available-unit"
@@ -51,7 +51,7 @@ const AvailableUnits = ({ currentResort }) => {
             <h1 className="text-2xl font-semibold text-[#037092] my-3">Extra Vacation Getaways</h1>
           </div>
         </Link>
-      </div>
+      </div> */}
 
 {/* Last Call Vacation */}
       <div className="border-[1px] rounded my-10 py-5 shadow-gray-200 shadow-md">
