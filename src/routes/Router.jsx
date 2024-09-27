@@ -9,6 +9,7 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Profile from "../pages/Profile/Profile";
 import Dashboard from "../layout/Dashboard/Dashboard";
 import Overview from "../pages/Overview/Overview";
+import MyBookings from "../pages/MyBookings/Mybookings";
 
 
 export const router = createBrowserRouter([
@@ -55,7 +56,7 @@ export const router = createBrowserRouter([
      element: <Dashboard />,
      children: [
        { path: "overview", element: <Overview /> },
-     //   { path: "my-bookings", element: <MyBookings /> }
+       { path: "my-bookings", element: <MyBookings /> }
      ],
    },
 ])
