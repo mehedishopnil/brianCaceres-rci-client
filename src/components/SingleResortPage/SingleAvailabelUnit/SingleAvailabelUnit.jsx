@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DateRangePicker } from "react-date-range";
 import { addDays } from "date-fns";
 import { IoIosArrowDown } from "react-icons/io";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { AuthContext } from "../../../../providers/AuthProvider";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 const SingleAvailableUnit = () => {
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
@@ -16,14 +16,13 @@ const SingleAvailableUnit = () => {
     key: "selection",
   });
   const [selectedUnit, setSelectedUnit] = useState(null);
-  const navigate = useNavigate()
-  const currentResort = JSON.parse(localStorage.getItem('currentResort'));
+  const navigate = useNavigate();
+  const currentResort = JSON.parse(localStorage.getItem("currentResort"));
 
   // Ensure currentResort is not null before using it
   if (!currentResort) {
     return <div>Error: No resort data found.</div>;
   }
-  
 
   const handleSelect = (ranges) => {
     const { selection } = ranges;
@@ -38,8 +37,6 @@ const SingleAvailableUnit = () => {
       key: "selection",
     });
   };
-  
-  
 
   const handleDateButtonClick = (unitType) => {
     setSelectedUnit(unitType);
@@ -52,27 +49,26 @@ const SingleAvailableUnit = () => {
 
   const handleShowUnits = () => {
     if (!currentResort) {
-        console.error("Error: No currentResort data available.");
-        return;
+      console.error("Error: No currentResort data available.");
+      return;
     }
 
     if (user) {
-        navigate("/available-booking", {
-            state: {
-                resort: currentResort,
-                startDate: selectionRange.startDate,
-                endDate: selectionRange.endDate,
-                unitType: selectedUnit,
-            },
-        });
+      navigate("/available-booking", {
+        state: {
+          resort: currentResort,
+          startDate: selectionRange.startDate,
+          endDate: selectionRange.endDate,
+          unitType: selectedUnit,
+        },
+      });
     } else {
-        // User is not logged in, save current path and redirect to login
-        navigate("/login", {
-            state: { from: location.pathname }
-        });
+      // User is not logged in, save current path and redirect to login
+      navigate("/login", {
+        state: { from: location.pathname },
+      });
     }
-};
-
+  };
 
   const handleClearDate = () => {
     setSelectionRange({
@@ -82,7 +78,6 @@ const SingleAvailableUnit = () => {
     });
     setIsCalendarOpen(false);
   };
-
 
   return (
     <div className="mt-10">
@@ -127,7 +122,9 @@ const SingleAvailableUnit = () => {
         </div>
 
         <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">1 bedroom</h1>
+          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
+            1 bedroom
+          </h1>
           <button
             className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("1 bedroom")}
@@ -137,7 +134,9 @@ const SingleAvailableUnit = () => {
         </div>
 
         <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">2 bedroom</h1>
+          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
+            2 bedroom
+          </h1>
           <button
             className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("2 bedroom")}

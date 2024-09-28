@@ -10,58 +10,60 @@ import Profile from "../pages/Profile/Profile";
 import Dashboard from "../layout/Dashboard/Dashboard";
 import Overview from "../pages/Overview/Overview";
 import MyBookings from "../pages/MyBookings/Mybookings";
-import SingleAvailableUnit from "../components/SingleResortPage/FilterContent/FilteredComponent/SingleAvailableUnit";
-
+import AvailableBooking from "../components/SingleResortPage/AvailableBooking/AvailableBooking";
+import SingleAvailableUnit from "../components/SingleResortPage/SingleAvailabelUnit/SingleAvailabelUnit";
 
 export const router = createBrowserRouter([
-     {
-          path: "/",
-          element: <Main/>,
-          children:[
-               {
-                    path: "/",
-                    element: <Home/>
-               },
-               {
-                    path: "lastCallVacation",
-                    element: <LastCallVacations/>
-               },
-               {
-                    path: "singleResortPage/:id",
-                    element: <SingleResortPage/>
-               },
-               {
-                    path: "login",
-                    element: <Login/>
-               },
-               {
-                    path: "registration",
-                    element: <Registration/>
-               },
-               {
-                    path: "profile",
-                    element: <Profile/>
-               },
-               {
-                    path: "single-available-unit",
-                    element: <SingleAvailableUnit/>
-               },
-               {
-                    path: "*",
-                    element: <ErrorPage/>
- 
-               }
-          ]
-     },
-
-
-     // Dashboard Part
   {
-     path: "dashboard",
-     element: <Dashboard />,
-     children: [
-       { path: "overview", element: <Overview /> },
-       { path: "my-bookings", element: <MyBookings /> }
-     ],
-   },
-])
+    path: "/",
+    element: <Main />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "lastCallVacation",
+        element: <LastCallVacations />,
+      },
+      {
+        path: "singleResortPage/:id",
+        element: <SingleResortPage />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "registration",
+        element: <Registration />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "single-available-unit",
+        element: <SingleAvailableUnit />,
+      },
+      {
+        path: "available-booking",
+        element: <AvailableBooking/> ,
+      },
+      {
+        path: "*",
+        element: <ErrorPage />,
+      },
+    ],
+  },
+
+  // Dashboard Part
+  {
+    path: "dashboard",
+    element: <Dashboard />,
+    children: [
+      { path: "overview", element: <Overview /> },
+      { path: "my-bookings", element: <MyBookings /> },
+    ],
+  },
+]);
