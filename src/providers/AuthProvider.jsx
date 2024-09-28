@@ -375,60 +375,29 @@ const signOut = async () => {
 
 
 
- // Fetch exactly 30 resort data entries
-   const fetchResortData = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_Link}/resorts?limit=60`, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching resort data: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const resorts = data.resorts || [];
-
-      if (resorts.length > 0) {
-        setResortData(resorts);
-
-        // Calculate total pages based on 15 items per page
-        const pages = Math.ceil(resorts.length / ITEMS_PER_PAGE);
-        setTotalPages(pages);
-
-        // Set the initial paginated data for the first page
-        const firstPageData = resorts.slice(0, ITEMS_PER_PAGE);
-        setFilteredData(firstPageData);
-      }
-    } catch (error) {
-      console.error("Error fetching resort data:", error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: `Failed to fetch resort data: ${error.message}`,
-      });
-    } finally {
-      setLoading(false);
+ // Fetch resort data
+ const fetchResortData = async (page = 1, limit = 15) => {
+  setLoading(true);
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_Link}/resorts?page=${page}&limit=${limit}`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Error fetching resort data: ${response.status} ${response.statusText}`
+      );
     }
-  };
-
-  // Paginate data client-side
-  const paginate = (pageNumber) => {
-    if (pageNumber < 1 || pageNumber > totalPages) return;
-    const startIndex = (pageNumber - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const paginatedData = resortData.slice(startIndex, endIndex);
-
-    setFilteredData(paginatedData);
-    setCurrentPage(pageNumber);
-  };
-
-  // Fetch resort data when the component mounts
-  useEffect(() => {
-    fetchResortData();
-  }, []);
-
+    const data = await response.json();
+    setResortData(data.resorts);
+    setFilteredData(data.resorts);
+    setTotalPages(data.totalPages);
+    setCurrentPage(data.currentPage);
+  } catch (error) {
+    console.error("Error fetching resort data:", error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
 
 //Fetch all resorts data:
