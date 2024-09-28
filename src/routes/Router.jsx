@@ -10,6 +10,7 @@ import Profile from "../pages/Profile/Profile";
 import Dashboard from "../layout/Dashboard/Dashboard";
 import Overview from "../pages/Overview/Overview";
 import MyBookings from "../pages/MyBookings/Mybookings";
+import SingleAvailableUnit from "../components/SingleResortPage/FilterContent/FilteredComponent/SingleAvailableUnit";
 
 
 export const router = createBrowserRouter([
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
                {
                     path: "profile",
                     element: <Profile/>
+               },
+               {
+                    path: "single-available-unit",
+                    element: <SingleAvailableUnit/>
                },
                {
                     path: "*",

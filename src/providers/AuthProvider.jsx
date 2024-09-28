@@ -25,12 +25,10 @@ const AuthProvider = ({ children }) => {
 
   const ITEMS_PER_PAGE = 15; 
 
-console.log(role)
 
   // Add the onAuthStateChanged useEffect here
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log(currentUser)
       if (currentUser) {
         // Fetch specific user data from the backend
         fetch(`${import.meta.env.VITE_API_Link}/users?email=${currentUser.email}`)
@@ -69,7 +67,6 @@ console.log(role)
         throw new Error("Failed to fetch user data from backend");
       }
       const userData = await response.json();
-      console.log(userData.email)
       if (userData.isAdmin) {
         setRole("admin");
       } else {
