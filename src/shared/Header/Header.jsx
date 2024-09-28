@@ -32,6 +32,7 @@ const Header = () => {
   };
 
   console.log(role)
+  console.log(user)
 
   return (
     <div className="bg-[#037092]">

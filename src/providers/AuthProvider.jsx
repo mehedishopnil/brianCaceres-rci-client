@@ -25,11 +25,12 @@ const AuthProvider = ({ children }) => {
 
   const ITEMS_PER_PAGE = 15; 
 
-
+console.log(role)
 
   // Add the onAuthStateChanged useEffect here
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log(currentUser)
       if (currentUser) {
         // Fetch specific user data from the backend
         fetch(`${import.meta.env.VITE_API_Link}/users?email=${currentUser.email}`)
@@ -62,12 +63,13 @@ const AuthProvider = ({ children }) => {
   const setUserRole = async (email) => {
     try {
       const response = await fetch(
-        `https://rci-last-call-server.vercel.app/users?email=${email}`
+        `${import.meta.env.VITE_API_Link}/users?email=${email}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch user data from backend");
       }
       const userData = await response.json();
+      console.log(userData.email)
       if (userData.isAdmin) {
         setRole("admin");
       } else {
@@ -496,7 +498,7 @@ useEffect(() => {
       fetchUserData();
     } else {
       setUser(null);
-      setRole(null); // Clear role on sign out
+      setRole(null);
       setBookingsData([]);
       setPaymentInfoData([]);
       setLoading(false);
