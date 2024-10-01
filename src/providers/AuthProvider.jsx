@@ -426,12 +426,81 @@ useEffect(() => {
   fetchAllResorts();
 }, []);
 
+// Fetch bookings data based on user's email
+const fetchBookingsData = async (email) => {
+  setLoading(true);
+  try {
+    const response = await fetch(
+      `https://rci-last-call-server.vercel.app/bookings?email=${email}`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Error fetching bookings data: ${response.status} ${response.statusText}`
+      );
+    }
+    const data = await response.json();
+    setBookingsData(data);
+  } catch (error) {
+    console.error("Error fetching bookings data:", error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Fetch payment information
+const fetchPaymentInformation = async (email) => {
+  setLoading(true);
+  try {
+    const response = await fetch(
+      `https://rci-last-call-server.vercel.app/bookings?email=${email}`
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Error fetching payment information: ${response.status} ${response.statusText}`
+      );
+    }
+    const data = await response.json();
+    if (Array.isArray(data) && data.length > 0) {
+      setPaymentInfoData(data[0]); // Assuming the first object in the array is the needed payment info
+    } else {
+      setPaymentInfoData({});
+    }
+    console.log("Payment information fetched:", data);
+  } catch (error) {
+    console.error("Error fetching payment information:", error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Fetch all Booking Data
+const fetchAllBookingsData = async () => {
+  setLoading(true);
+  try {
+    const response = await fetch(
+      "https://rci-last-call-server.vercel.app/all-bookings"
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Error fetching all resort data: ${response.status} ${response.statusText}`
+      );
+    }
+    const data = await response.json();
+    setAllBookingsData(data);
+  } catch (error) {
+    console.error("Error fetching all resort data:", error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
  // Effect to listen for auth state changes
  useEffect(() => {
   fetchResortData();
   fetchAllResorts();
-  // fetchAllBookingsData();
+  fetchAllBookingsData();
   fetchAllUsersData();
 
   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -452,8 +521,8 @@ useEffect(() => {
           await setUserRole(currentUser.email);
 
           // Fetch bookings data for the current user
-          // await fetchBookingsData(currentUser.email);
-          // await fetchPaymentInformation(currentUser.email);
+          await fetchBookingsData(currentUser.email);
+          await fetchPaymentInformation(currentUser.email);
         } catch (error) {
           console.error("Error fetching user data:", error.message);
         } finally {
@@ -473,6 +542,8 @@ useEffect(() => {
 
   return () => unsubscribe();
 }, []);
+
+
 
 
 

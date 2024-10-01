@@ -14,6 +14,7 @@ import AvailableBooking from "../components/SingleResortPage/AvailableBooking/Av
 import SingleAvailableUnit from "../components/SingleResortPage/SingleAvailabelUnit/SingleAvailabelUnit";
 import Checkout from "../pages/Checkout/Checkout";
 import Payment from "../pages/Payment/Payment";
+import PaymentConfirmation from "../pages/PaymentConfermation/PaymentConfermation";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: "payment",
         element: <Payment/>
+      },
+      {
+        path: "payment-confirmation",
+        element: <PaymentConfirmation/>
       },
       {
         path: "*",
