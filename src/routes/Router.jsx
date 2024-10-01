@@ -12,6 +12,7 @@ import Overview from "../pages/Overview/Overview";
 import MyBookings from "../pages/MyBookings/Mybookings";
 import AvailableBooking from "../components/SingleResortPage/AvailableBooking/AvailableBooking";
 import SingleAvailableUnit from "../components/SingleResortPage/SingleAvailabelUnit/SingleAvailabelUnit";
+import Checkout from "../pages/Checkout/Checkout";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "available-booking",
         element: <AvailableBooking/> ,
+      },
+      {
+        path: "checkout",
+        element: <Checkout/>
       },
       {
         path: "*",
