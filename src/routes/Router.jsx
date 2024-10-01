@@ -13,6 +13,7 @@ import MyBookings from "../pages/MyBookings/Mybookings";
 import AvailableBooking from "../components/SingleResortPage/AvailableBooking/AvailableBooking";
 import SingleAvailableUnit from "../components/SingleResortPage/SingleAvailabelUnit/SingleAvailabelUnit";
 import Checkout from "../pages/Checkout/Checkout";
+import Payment from "../pages/Payment/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout/>
+      },
+      {
+        path: "payment",
+        element: <Payment/>
       },
       {
         path: "*",
