@@ -431,7 +431,7 @@ const fetchBookingsData = async (email) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `https://rci-last-call-server.vercel.app/bookings?email=${email}`
+      `${import.meta.env.VITE_API_Link}/bookings?email=${email}`
     );
     if (!response.ok) {
       throw new Error(
@@ -452,7 +452,7 @@ const fetchPaymentInformation = async (email) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `https://rci-last-call-server.vercel.app/bookings?email=${email}`
+      `${import.meta.env.VITE_API_Link}/bookings?email=${email}`
     );
     if (!response.ok) {
       throw new Error(
@@ -478,7 +478,7 @@ const fetchAllBookingsData = async () => {
   setLoading(true);
   try {
     const response = await fetch(
-      "https://rci-last-call-server.vercel.app/all-bookings"
+      `${import.meta.env.VITE_API_Link}/all-bookings`
     );
     if (!response.ok) {
       throw new Error(

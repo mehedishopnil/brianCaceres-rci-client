@@ -55,7 +55,7 @@ const Payment = () => {
 
     try {
       const response = await fetch(
-        "https://rci-last-call-server.vercel.app/bookings",
+        `${import.meta.env.VITE_API_Link}/bookings`,
         {
           method: "POST",
           headers: {
