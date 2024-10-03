@@ -465,7 +465,7 @@ const fetchPaymentInformation = async (email) => {
     } else {
       setPaymentInfoData({});
     }
-    console.log("Payment information fetched:", data);
+
   } catch (error) {
     console.error("Error fetching payment information:", error.message);
   } finally {
