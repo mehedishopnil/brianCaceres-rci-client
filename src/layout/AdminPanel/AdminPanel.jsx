@@ -102,7 +102,7 @@ const AdminPanel = () => {
 
               
               <li>
-                <button onClick={() => handleMenuItemClick("/admin-paneladmin-control")}>
+                <button onClick={() => handleMenuItemClick("/admin-panel/admin-control")}>
                 <RiAdminLine /> Admin Control
                 </button>
               </li>
