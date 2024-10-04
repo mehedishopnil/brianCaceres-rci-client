@@ -409,7 +409,7 @@ const Header = () => {
             )}
           </div>
         </div>
-        <SearchBarMobile />
+        <SearchBarMobile/>
       </div>
     </div>
   );

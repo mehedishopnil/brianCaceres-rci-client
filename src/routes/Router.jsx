@@ -20,6 +20,8 @@ import AdminOverview from "../pages/AdminOverview/AdminOverview";
 import AdminControl from "../pages/AdminControl/AdminControl";
 import UserControl from "../pages/UserControl/UserControl";
 import UsersBookings from "../pages/UsersBookings/UsersBookings";
+import SearchBarMobile from "../components/SearchBarMobile/SearchBarMobile";
+import Search from "../components/Search/Search";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +59,14 @@ export const router = createBrowserRouter([
       {
         path: "available-booking",
         element: <AvailableBooking/> ,
+      },
+      {
+        path: "search_bar_mobile",
+        element: <SearchBarMobile/>
+      },
+      {
+        path: "search",
+        element: <Search/>
       },
       {
         path: "checkout",
