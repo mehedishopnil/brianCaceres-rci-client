@@ -22,6 +22,7 @@ import UserControl from "../pages/UserControl/UserControl";
 import UsersBookings from "../pages/UsersBookings/UsersBookings";
 import SearchBarMobile from "../components/SearchBarMobile/SearchBarMobile";
 import Search from "../components/Search/Search";
+import ResortInputForm from "../pages/ResortInputForm/ResortInputForm";
 
 export const router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ export const router = createBrowserRouter([
         path: "users-bookings",
         element: <UsersBookings/>
       },
+      {
+        path: "resort-input-form",
+        element: <ResortInputForm/>
+      }
     ]
   }
 ]);
