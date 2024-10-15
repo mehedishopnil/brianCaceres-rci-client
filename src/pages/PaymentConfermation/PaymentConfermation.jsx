@@ -16,26 +16,27 @@ const PaymentConfirmation = () => {
   useEffect(() => {
     console.log('Bookings Data:', allBookingsData);
     console.log('Resort Data:', resort);
-
+  
     if (allBookingsData && resort) {
       // Ensure allBookingsData is an array
       const bookingsArray = Array.isArray(allBookingsData) ? allBookingsData : [allBookingsData];
       console.log('Bookings Array:', bookingsArray);
-
+  
       // Find the matching booking
       const foundBooking = bookingsArray.find((booking) => {
-        const bookingResortId = String(booking.resort.resort_ID);
-        const resortId = String(resort.resort_ID);
+        const bookingResortId = String(booking?.resort?.resort_ID);
+        const resortId = String(resort?.resort_ID);
         console.log('Comparing:', bookingResortId, resortId);
         return bookingResortId === resortId;
       });
-
+  
       console.log('Found Booking:', foundBooking);
       // Set the matching booking and update loading state
       setMatchingBooking(foundBooking);
     }
     setLoading(false); // Ensure loading state is set to false after processing
   }, [allBookingsData, resort]);
+  
 
   if (loading) {
     return <div><Loading/></div>;

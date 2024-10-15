@@ -22,9 +22,7 @@ const AuthProvider = ({ children }) => {
 
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
-
-  const ITEMS_PER_PAGE = 15; 
-
+  
 
   // Add the onAuthStateChanged useEffect here
   useEffect(() => {
