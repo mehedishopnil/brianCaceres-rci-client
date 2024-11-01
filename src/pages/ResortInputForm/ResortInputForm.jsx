@@ -61,7 +61,7 @@ const {allResortData} = useContext(AuthContext);
     e.preventDefault();
     try {
       const response = await fetch(
-        "https://rci-last-call-server.vercel.app/resorts",
+        `${import.meta.env.VITE_API_Link}/resorts`,
         {
           method: "POST",
           headers: {
