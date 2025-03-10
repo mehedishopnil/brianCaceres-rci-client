@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../providers/AuthProvider";
 
 const ResortInputForm = () => {
-const {allResortData} = useContext(AuthContext);
+  const { allResortData } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     img: "",
@@ -132,22 +132,38 @@ const {allResortData} = useContext(AuthContext);
     }
   };
 
+  // Options for numbers 1 to 8
+  const numberOptions = [1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+    <option key={num} value={num}>
+      {num}
+    </option>
+  ));
+
+  // Options for Kitchen and Bath fields
+  const kitchenBathOptions = [
+    "Full",
+    "Partial",
+    "2 Full Baths",
+    "3/4 Baths",
+    "Full Bath & 3/4 Bath",
+    "3 Full Baths",
+    "No",
+  ].map((option) => (
+    <option key={option} value={option}>
+      {option}
+    </option>
+  ));
+
   return (
     <div className="max-w-md p-4 mx-auto my-5">
       <h2 className="text-xl text-center font-semibold mb-4">
         Resort Input Form
       </h2>
       <h1>Total Data: {allResortData.length}</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="drop-shadow-sm border rounded p-4"
-      >
-        {/* Image 1*/}
+      <form onSubmit={handleSubmit} className="drop-shadow-sm border rounded p-4">
+        {/* Image 1 */}
         <div className="mb-4">
-          <label
-            htmlFor="img"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="img" className="block text-sm font-medium text-gray-700">
             Main Image
           </label>
           <input
@@ -160,12 +176,9 @@ const {allResortData} = useContext(AuthContext);
           />
         </div>
 
-        {/* Image 2*/}
+        {/* Image 2 */}
         <div className="mb-4">
-          <label
-            htmlFor="img2"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="img2" className="block text-sm font-medium text-gray-700">
             Image 2
           </label>
           <input
@@ -178,12 +191,9 @@ const {allResortData} = useContext(AuthContext);
           />
         </div>
 
-        {/* Image 3*/}
+        {/* Image 3 */}
         <div className="mb-4">
-          <label
-            htmlFor="img3"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="img3" className="block text-sm font-medium text-gray-700">
             Image 3
           </label>
           <input
@@ -198,10 +208,7 @@ const {allResortData} = useContext(AuthContext);
 
         {/* Location */}
         <div className="mb-4">
-          <label
-            htmlFor="location"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
             Location
           </label>
           <input
@@ -213,12 +220,10 @@ const {allResortData} = useContext(AuthContext);
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
-        {/* ResortID */}
+
+        {/* Resort ID */}
         <div className="mb-4">
-          <label
-            htmlFor="resortID"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="resortID" className="block text-sm font-medium text-gray-700">
             Resort ID
           </label>
           <input
@@ -227,17 +232,13 @@ const {allResortData} = useContext(AuthContext);
             name="resort_ID"
             value={formData.resort_ID}
             onChange={handleChange}
-            className="mt-1 p-2  w-full text-gray-500 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 p-2 w-full text-gray-500 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
 
-
         {/* Place Name */}
         <div className="mb-4">
-          <label
-            htmlFor="placeName"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="placeName" className="block text-sm font-medium text-gray-700">
             Place Name
           </label>
           <input
@@ -250,13 +251,9 @@ const {allResortData} = useContext(AuthContext);
           />
         </div>
 
-
         {/* Price USD */}
         <div className="mb-4">
-          <label
-            htmlFor="priceUSD"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="priceUSD" className="block text-sm font-medium text-gray-700">
             Price USD
           </label>
           <input
@@ -271,10 +268,7 @@ const {allResortData} = useContext(AuthContext);
 
         {/* Resort Details */}
         <div className="mb-4">
-          <label
-            htmlFor="resortDetails"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="resortDetails" className="block text-sm font-medium text-gray-700">
             Resort Details
           </label>
           <textarea
@@ -288,10 +282,7 @@ const {allResortData} = useContext(AuthContext);
 
         {/* Check-in Time */}
         <div className="mb-4">
-          <label
-            htmlFor="checkInTime"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="checkInTime" className="block text-sm font-medium text-gray-700">
             Check-in Time
           </label>
           <select
@@ -306,20 +297,17 @@ const {allResortData} = useContext(AuthContext);
             <option value="13.00">13.00</option>
             <option value="14.00">14.00</option>
             <option value="15.00">15.00</option>
-            <option value="16.00">16.00</option> 
-            <option value="17.00">17.00</option> 
+            <option value="16.00">16.00</option>
+            <option value="17.00">17.00</option>
+            <option value="18.00">18.00</option>
           </select>
         </div>
 
         {/* Check-out Time */}
         <div className="mb-4">
-          <label
-            htmlFor="checkOutTime"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="checkOutTime" className="block text-sm font-medium text-gray-700">
             Check-out Time
           </label>
-
           <select
             id="check_out_time"
             name="check_out_time"
@@ -333,16 +321,14 @@ const {allResortData} = useContext(AuthContext);
             <option value="10.00">10.00</option>
             <option value="10.30">10.30</option>
             <option value="11.00">11.00</option>
-            <option value="12.00">12.00</option> {/* Fixed the value here */}
+            <option value="12.00">12.00</option>
+            <option value="13.00">13.00</option>
           </select>
         </div>
 
         {/* Rating */}
         <div className="mb-4">
-          <label
-            htmlFor="rating"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
             Rating
           </label>
           <select
@@ -352,20 +338,17 @@ const {allResortData} = useContext(AuthContext);
             onChange={handleChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
-            <option value="">Select the Time</option>
+            <option value="">Select the Rating</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5</option> {/* Fixed the value here */}
+            <option value="5">5</option>
           </select>
         </div>
 
         {/* RCI Gold Crown / Silver Crown */}
         <div className="mb-4">
-          <label
-            htmlFor="stateRating"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Rating
+          <label htmlFor="stateRating" className="block text-sm font-medium text-gray-700">
+            Rating Option
           </label>
           <select
             id="stateRating"
@@ -380,13 +363,9 @@ const {allResortData} = useContext(AuthContext);
           </select>
         </div>
 
-
-        {/* Owner Exclusive*/}
+        {/* Owner Exclusive */}
         <div className="mb-4">
-          <label
-            htmlFor="ownerExclusive"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ownerExclusive" className="block text-sm font-medium text-gray-700">
             Owner Exclusive
           </label>
           <select
@@ -398,17 +377,13 @@ const {allResortData} = useContext(AuthContext);
           >
             <option value="">Select the Option</option>
             <option value="Owner Exclusive">Owner Exclusive</option>
-            <option value="Owner Exclusive">new Owner Exclusive</option>
-
+            <option value="new Owner Exclusive">new Owner Exclusive</option>
           </select>
         </div>
 
         {/* Available Amount */}
         <div className="mb-4">
-          <label
-            htmlFor="availableAmount"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="availableAmount" className="block text-sm font-medium text-gray-700">
             Available Amount
           </label>
           <input
@@ -420,12 +395,10 @@ const {allResortData} = useContext(AuthContext);
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
+
         {/* Reviews Amount */}
         <div className="mb-4">
-          <label
-            htmlFor="reviewsAmount"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="reviewsAmount" className="block text-sm font-medium text-gray-700">
             Reviews Amount
           </label>
           <input
@@ -437,12 +410,10 @@ const {allResortData} = useContext(AuthContext);
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
+
         {/* Room Description */}
         <div className="mb-4">
-          <label
-            htmlFor="room_Description"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="room_Description" className="block text-sm font-medium text-gray-700">
             Room Description
           </label>
           <textarea
@@ -453,211 +424,209 @@ const {allResortData} = useContext(AuthContext);
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           ></textarea>
         </div>
-        {/*Hotel Sleeps Room */}
+
+        {/* Sleeps Room */}
         <div className="mb-4">
-          <label
-            htmlFor="sleepsRoom"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="sleeps_room" className="block text-sm font-medium text-gray-700">
             Sleeps Room
           </label>
-          <input
-            type="number"
-            id="sleepsRoom"
+          <select
+            id="sleeps_room"
             name="sleeps_room"
             value={formData.room_details.sleeps_room}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          >
+            <option value="">Select Number</option>
+            {numberOptions}
+          </select>
         </div>
+
         {/* Privacy Room Amount */}
         <div className="mb-4">
-          <label
-            htmlFor="privacyRoomAmount"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="privacy_room_amount" className="block text-sm font-medium text-gray-700">
             Privacy Room Amount
           </label>
-          <input
-            type="number"
-            id="privacyRoomAmount"
+          <select
+            id="privacy_room_amount"
             name="privacy_room_amount"
             value={formData.room_details.privacy_room_amount}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          >
+            <option value="">Select Number</option>
+            {numberOptions}
+          </select>
         </div>
+
         {/* Kitchen */}
         <div className="mb-4">
-          <label
-            htmlFor="kitchen"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="kitchen" className="block text-sm font-medium text-gray-700">
             Kitchen
           </label>
-          <input
-            type="text"
+          <select
             id="kitchen"
             name="kitchen"
             value={formData.room_details.kitchen}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          >
+            <option value="">Select Option</option>
+            {kitchenBathOptions}
+          </select>
         </div>
+
         {/* Bath */}
         <div className="mb-4">
-          <label
-            htmlFor="bath"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="bath" className="block text-sm font-medium text-gray-700">
             Bath
           </label>
-          <input
-            type="text"
+          <select
             id="bath"
             name="bath"
             value={formData.room_details.bath}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          >
+            <option value="">Select Option</option>
+            {kitchenBathOptions}
+          </select>
         </div>
 
-        {/*Studio Sleeps Room */}
+        {/* Studio Sleeps Room */}
         <div className="mb-4">
-          <label
-            htmlFor="sleepsRoom"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="studio_sleeps_room" className="block text-sm font-medium text-gray-700">
             Studio Sleeps Room
           </label>
-          <input
-            type="number"
-            id="sleepsRoom"
+          <select
+            id="studio_sleeps_room"
             name="studio_sleeps_room"
             value={formData.room_details.studio_sleeps_room}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        {/* Privacy Room Amount */}
-        <div className="mb-4">
-          <label
-            htmlFor="privacyRoomAmount"
-            className="block text-sm font-medium text-gray-700"
           >
+            <option value="">Select Number</option>
+            {numberOptions}
+          </select>
+        </div>
+
+        {/* Studio Privacy Room Amount */}
+        <div className="mb-4">
+          <label htmlFor="studio_privacy_room_amount" className="block text-sm font-medium text-gray-700">
             Studio Privacy Room Amount
           </label>
-          <input
-            type="number"
-            id="privacyRoomAmount"
+          <select
+            id="studio_privacy_room_amount"
             name="studio_privacy_room_amount"
             value={formData.room_details.studio_privacy_room_amount}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        {/* Kitchen */}
-        <div className="mb-4">
-          <label
-            htmlFor="kitchen"
-            className="block text-sm font-medium text-gray-700"
           >
+            <option value="">Select Number</option>
+            {numberOptions}
+          </select>
+        </div>
+
+        {/* Studio Kitchen */}
+        <div className="mb-4">
+          <label htmlFor="studio_kitchen" className="block text-sm font-medium text-gray-700">
             Studio Kitchen
           </label>
-          <input
-            type="text"
-            id="kitchen"
+          <select
+            id="studio_kitchen"
             name="studio_kitchen"
             value={formData.room_details.studio_kitchen}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        {/* Bath */}
-        <div className="mb-4">
-          <label
-            htmlFor="bath"
-            className="block text-sm font-medium text-gray-700"
           >
+            <option value="">Select Option</option>
+            {kitchenBathOptions}
+          </select>
+        </div>
+
+        {/* Studio Bath */}
+        <div className="mb-4">
+          <label htmlFor="studio_bath" className="block text-sm font-medium text-gray-700">
             Studio Bath
           </label>
-          <input
-            type="text"
-            id="bath"
+          <select
+            id="studio_bath"
             name="studio_bath"
             value={formData.room_details.studio_bath}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          >
+            <option value="">Select Option</option>
+            {kitchenBathOptions}
+          </select>
         </div>
 
-        {/*Hotel */}
+        {/* Hotel Room */}
         <div className="mb-4">
-          <label
-            htmlFor="hotel_room"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="hotel_room" className="block text-sm font-medium text-gray-700">
             Hotel Room
           </label>
-          <input
-            type="number"
+          <select
             id="hotel_room"
             name="hotel_room"
             value={formData.room_details.hotel_room}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        {/* Privacy Room Amount */}
-        <div className="mb-4">
-          <label
-            htmlFor="hotel_privacy_room_amount"
-            className="block text-sm font-medium text-gray-700"
           >
+            <option value="">Select Number</option>
+            {numberOptions}
+          </select>
+        </div>
+
+        {/* Hotel Privacy Room Amount */}
+        <div className="mb-4">
+          <label htmlFor="hotel_privacy_room_amount" className="block text-sm font-medium text-gray-700">
             Hotel Privacy Room Amount
           </label>
-          <input
-            type="number"
+          <select
             id="hotel_privacy_room_amount"
             name="hotel_privacy_room_amount"
             value={formData.room_details.hotel_privacy_room_amount}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        {/* Kitchen */}
-        <div className="mb-4">
-          <label
-            htmlFor="kitchen"
-            className="block text-sm font-medium text-gray-700"
           >
+            <option value="">Select Number</option>
+            {numberOptions}
+          </select>
+        </div>
+
+        {/* Hotel Kitchen */}
+        <div className="mb-4">
+          <label htmlFor="hotel_kitchen" className="block text-sm font-medium text-gray-700">
             Hotel Kitchen
           </label>
-          <input
-            type="text"
+          <select
             id="hotel_kitchen"
             name="hotel_kitchen"
             value={formData.room_details.hotel_kitchen}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        {/* Bath */}
-        <div className="mb-4">
-          <label
-            htmlFor="bath"
-            className="block text-sm font-medium text-gray-700"
           >
+            <option value="">Select Option</option>
+            {kitchenBathOptions}
+          </select>
+        </div>
+
+        {/* Hotel Bath */}
+        <div className="mb-4">
+          <label htmlFor="hotel_bath" className="block text-sm font-medium text-gray-700">
             Hotel Bath
           </label>
-          <input
-            type="text"
+          <select
             id="hotel_bath"
             name="hotel_bath"
             value={formData.room_details.hotel_bath}
             onChange={handleRoomDetailsChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+          >
+            <option value="">Select Option</option>
+            {kitchenBathOptions}
+          </select>
         </div>
 
         {/* Submit Button */}
