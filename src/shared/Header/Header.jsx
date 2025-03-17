@@ -40,41 +40,41 @@ const Header = () => {
         {/* Logo and Search Bar */}
         <div className="navbar-start flex items-center gap-5">
           <Link to="/" className="z-20">
-            <img src={logo} alt="Logo" className="" />
+            <img src={logo} alt="Logo" className="w-12" />
           </Link>
           <div className="w-[1px] h-14 bg-white"></div>
           <img
             src={logo2}
             alt=""
-            className="w-[50px]"
+            className="w-[80px]"
           />
         </div>
 
         {/* Desktop Menu */}
-        <div className="navbar-center">
-          <ul className="menu menu-horizontal px-1 text-white">
+        <div className="navbar-center ">
+          <ul className="menu  menu-horizontal px-1 text-white">
             <li>
               <Link to="/lastCallVacation">
-                <p className="text-xl">BOOK</p>
+                <p className="">BOOK</p>
               </Link>
             </li>
             {user && role ? (
               <>
                 <li>
                   <Link to="/">
-                    <p className="text-xl">TRIPS</p>
+                    <p className="">TRIPS</p>
                   </Link>
                 </li>
                 {role === "admin" ? (
                   <>
                     <li>
                       <Link to="/admin-panel/admin-overview">
-                        <p className="text-xl">AdminPanel</p>
+                        <p className="">AdminPanel</p>
                       </Link>
                     </li>
                     <li>
                       <Link to="/profile">
-                        <p className="text-xl">Profile</p>
+                        <p className="">Profile</p>
                       </Link>
                     </li>
                   </>
@@ -82,27 +82,27 @@ const Header = () => {
                   <>
                     <li>
                       <Link to="/dashboard">
-                        <p className="text-xl">Dashboard</p>
+                        <p className="">Dashboard</p>
                       </Link>
                     </li>
                     <li>
                       <Link to="/notifications">
-                        <p className="text-xl">Notifications</p>
+                        <p className="">Notifications</p>
                       </Link>
                     </li>
                     <li>
                       <Link to="/myAccount">
-                        <p className="text-xl">My Account</p>
+                        <p className="">My Account</p>
                       </Link>
                     </li>
                     <li>
                       <Link to="/profile">
-                        <p className="text-xl">Profile</p>
+                        <p className="">Profile</p>
                       </Link>
                     </li>
                     <li>
                       <Link to="/myFavorites">
-                        <p className="text-xl">My Favorites</p>
+                        <p className="">My Favorites</p>
                       </Link>
                     </li>
                   </>
@@ -112,19 +112,10 @@ const Header = () => {
               <>
                 <li>
                   <Link to="/">
-                    <p className="text-xl">HOME</p>
+                    <p className="">HOME</p>
                   </Link>
                 </li>
-                <li>
-                  <Link to="/login">
-                    <p className="text-sm md:text-xl">LOGIN</p>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/registration">
-                    <p className="text-sm md:text-xl">Registration</p>
-                  </Link>
-                </li>
+                
               </>
             )}
           </ul>
@@ -189,7 +180,7 @@ const Header = () => {
             <img
               src={logo2}
               alt=""
-              className="w-[50px]"
+              className="w-[60px]"
             />
           </div>
 
@@ -239,9 +230,9 @@ const Header = () => {
               onClick={toggleMenu}
             >
               {isMenuOpen ? (
-                <FaTimes className="h-8 w-8 text-xl text-white" />
+                <FaTimes className="h-8 w-8  text-white" />
               ) : (
-                <FaBars className="h-8 w-8 text-xl text-white" />
+                <FaBars className="h-8 w-8  text-white" />
               )}
             </div>
             {isMenuOpen && (

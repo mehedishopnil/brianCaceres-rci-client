@@ -32,7 +32,22 @@ const Dashboard = () => {
             </Link>
           </li>
           <li>
-            <Link to="resort-input-form">Resort Input Form</Link>
+          <button onClick={() => handleMenuItemClick("/dashboard/my-bookings")}>
+                  <FaWpforms /> My Bookings
+                </button>
+              </li>
+
+              <div className="divider"></div>
+
+              <li>
+                <button onClick={() => handleMenuItemClick("/")}>
+                  <FaHome /> Home
+                </button>
+              </li>
+          <li>
+            <Link to="resort-input-form">
+            Resort Input Form
+            </Link>
           </li>
         </ul>
       </div>
@@ -63,7 +78,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold"></h2>
               <button onClick={toggleMobileMenu} className="text-2xl text-gray-700">
-                <IoMdClose />
+                              <IoMdClose />
               </button>
             </div>
             <ul className="menu text-gray-700 font-bold text-xl">
@@ -75,7 +90,7 @@ const Dashboard = () => {
               </li>
               
 
-              <li>
+<li>
                 <button onClick={() => handleMenuItemClick("/dashboard/my-bookings")}>
                   <FaWpforms /> My Bookings
                 </button>
