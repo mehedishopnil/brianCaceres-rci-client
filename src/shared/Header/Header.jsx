@@ -195,10 +195,10 @@ const Header = () => {
 
           {/* Mobile Dropdown */}
           <div className="flex dropdown relative">
-            <div className="flex gap-1">
+            <div className="flex gap-1 justify-center items-center">
               {user ? (
                 <>
-                  <Link to="/profile">
+                  <Link to="/profile" className="text-white pr-3">
                     {user.photoURL ? (
                       <img
                         src={user.photoURL}
