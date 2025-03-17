@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../../public/Travel&Leisure-logo.png";
+import logo from "../../../public/rci-logo-white.png";
+import logo2 from "../../../public/Travel&Leisure-logo.png";
 import {
   IoIosHelpCircleOutline,
   IoMdNotificationsOutline,
@@ -43,7 +44,7 @@ const Header = () => {
           </Link>
           <div className="w-[1px] h-14 bg-white"></div>
           <img
-            src="https://www.rci.com/static/images/content/header/RCI-ClubWyndham-new.png"
+            src={logo2}
             alt=""
             className="w-[50px]"
           />
@@ -182,13 +183,13 @@ const Header = () => {
           <div className="space-x-4 pr-2">
             {/* Logo */}
             <Link to="/" className="z-20">
-              <img src={logo} alt="" className="w-[72px] " />
+              <img src={logo} alt="" className="w-[42px] " />
             </Link>
             <span className="w-[1px] h-8 bg-white"></span>
             <img
-              src="https://www.rci.com/static/images/content/header/RCI-ClubWyndham-new.png"
+              src={logo2}
               alt=""
-              className="w-[40px]"
+              className="w-[50px]"
             />
           </div>
 
