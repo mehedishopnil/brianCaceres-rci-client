@@ -179,23 +179,23 @@ const Header = () => {
       {/* Mobile Navbar */}
       <div className="">
         <div className="container mx-auto flex lg:hidden justify-between items-center navbar">
-          <div className="space-x-4">
+          <div className="space-x-4 pr-2">
             {/* Logo */}
             <Link to="/" className="z-20">
-              <img src={logo} alt="" className="w-[62px] " />
+              <img src={logo} alt="" className="w-[72px] " />
             </Link>
-            <div className="w-[1px] h-8 bg-white"></div>
+            <span className="w-[1px] h-8 bg-white"></span>
             <img
               src="https://www.rci.com/static/images/content/header/RCI-ClubWyndham-new.png"
               alt=""
-              className="w-[50px]"
+              className="w-[40px]"
             />
           </div>
 
 
           {/* Mobile Dropdown */}
           <div className="flex dropdown relative">
-            <div className="flex gap-4">
+            <div className="flex gap-1">
               {user ? (
                 <>
                   <Link to="/profile">
@@ -244,7 +244,7 @@ const Header = () => {
               )}
             </div>
             {isMenuOpen && (
-              <div className="p-5">
+              <div className="p-2">
                 <ul className="absolute right-0 menu menu-lg dropdown-content mt-5 p-2 shadow bg-white rounded-box w-screen z-10 h-fit flex flex-col">
                   <div>
                     <Link to="/lastCallVacation" onClick={closeMenu}>
