@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../../public/rci-logo-white.png";
+import logo from "../../../public/Travel&Leisure-logo.png";
 import {
   IoIosHelpCircleOutline,
   IoMdNotificationsOutline,
@@ -39,13 +39,13 @@ const Header = () => {
         {/* Logo and Search Bar */}
         <div className="navbar-start flex items-center gap-5">
           <Link to="/" className="z-20">
-            <img src={logo} alt="Logo" className="w-12 h-12" />
+            <img src={logo} alt="Logo" className="" />
           </Link>
           <div className="w-[1px] h-14 bg-white"></div>
           <img
             src="https://www.rci.com/static/images/content/header/RCI-ClubWyndham-new.png"
             alt=""
-            className="w-[80px]"
+            className="w-[50px]"
           />
         </div>
 
@@ -116,12 +116,12 @@ const Header = () => {
                 </li>
                 <li>
                   <Link to="/login">
-                    <p className="text-xl">LOGIN</p>
+                    <p className="text-sm md:text-xl">LOGIN</p>
                   </Link>
                 </li>
                 <li>
                   <Link to="/registration">
-                    <p className="text-xl">Registration</p>
+                    <p className="text-sm md:text-xl">Registration</p>
                   </Link>
                 </li>
               </>
@@ -175,21 +175,23 @@ const Header = () => {
         </div>
       </div>
 
+
       {/* Mobile Navbar */}
       <div className="">
         <div className="container mx-auto flex lg:hidden justify-between items-center navbar">
           <div className="space-x-4">
             {/* Logo */}
             <Link to="/" className="z-20">
-              <img src={logo} alt="" className="w-[52px] h-[52px]" />
+              <img src={logo} alt="" className="w-[62px] " />
             </Link>
-            <div className="w-[1px] h-14 bg-white"></div>
+            <div className="w-[1px] h-8 bg-white"></div>
             <img
               src="https://www.rci.com/static/images/content/header/RCI-ClubWyndham-new.png"
               alt=""
-              className="w-[80px]"
+              className="w-[50px]"
             />
           </div>
+
 
           {/* Mobile Dropdown */}
           <div className="flex dropdown relative">
@@ -216,13 +218,13 @@ const Header = () => {
                 <>
                   <Link
                     to="/login"
-                    className="text-white border rounded px-2 py-1 hover:bg-white hover:text-gray-500"
+                    className="text-xs text-white border rounded px-1 py-1 hover:bg-white hover:text-gray-500"
                   >
                     Login
                   </Link>
                   <Link
                     to="/registration"
-                    className="text-white border rounded px-2 py-1 hover:bg-white hover:text-gray-500"
+                    className="text-xs text-white border rounded px-2 py-1 hover:bg-white hover:text-gray-500"
                   >
                     Registration
                   </Link>
