@@ -375,12 +375,12 @@ const ResortInputForm = () => {
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
             <option value="">Select the Rating</option>
-            <option value="3">5</option>
-            <option value="4">6</option>
-            <option value="5">7</option>
-            <option value="5">8</option>
-            <option value="5">9</option>
-            <option value="5">10</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
           </select>
         </div>
 
