@@ -9,6 +9,8 @@ const ResortInputForm = () => {
     img: "",
     img2: "",
     img3: "",
+    img4: "",
+    img5: "",
     location: "",
     resort_ID: "",
     place_name: "",
@@ -80,6 +82,8 @@ const ResortInputForm = () => {
         img: "",
         img2: "",
         img3: "",
+        img4: "",
+        img5: "",
         location: "",
         resort_ID: "",
         place_name: "",
@@ -201,6 +205,38 @@ const ResortInputForm = () => {
             id="img3"
             name="img3"
             value={formData.img3}
+            onChange={handleChange}
+            className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+
+        {/* Image 4 */}
+        <div className="mb-4">
+          <label htmlFor="img4" className="block text-sm font-medium text-gray-700">
+            Image 4
+          </label>
+          <input
+            type="text"
+            id="img4"
+            name="img4"
+            value={formData.img4}
+            onChange={handleChange}
+            className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+
+
+        {/* Image 5 */}
+        <div className="mb-4">
+          <label htmlFor="img5" className="block text-sm font-medium text-gray-700">
+            Image 5
+          </label>
+          <input
+            type="text"
+            id="img5"
+            name="img5"
+            value={formData.img5}
             onChange={handleChange}
             className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />

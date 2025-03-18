@@ -26,7 +26,11 @@ const Search = () => {
                         const nameMatch = resort.place_name ? resort.place_name.toLowerCase().includes(searchTerm.toLowerCase()) : false;
                         const locationMatch = resort.location ? resort.location.toLowerCase().includes(searchTerm.toLowerCase()) : false;
                         const idMatch = resort.resort_ID ? resort.resort_ID.toLowerCase().includes(searchTerm.toLowerCase()) : false;
-                        return nameMatch || locationMatch || idMatch;
+
+                        // Check if the place_name contains any number followed by "Nights"
+                        const hasNights = resort.place_name ? /\d+\s*Nights/.test(resort.place_name) : false;
+
+                        return (nameMatch || locationMatch || idMatch) && !hasNights; // Exclude results with "Nights" in place_name
                     });
                     setSearchData(filteredData);
                 } else {

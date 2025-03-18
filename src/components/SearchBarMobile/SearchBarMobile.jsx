@@ -11,7 +11,6 @@ const SearchBarMobile = () => {
     const navigate = useNavigate();
     const { allResortData } = useContext(AuthContext);
 
-
     // Load search history on mount
     useEffect(() => {
         const savedHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
@@ -43,11 +42,21 @@ const SearchBarMobile = () => {
             setLoading(true);
 
             // Filter based on place_name, location, or resort_ID
-            const filteredResortData = allResortData.filter(item =>
-                item.place_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (item.resort_ID && item.resort_ID.toString().toLowerCase().includes(searchQuery.toLowerCase()))
-            );
+            const filteredResortData = allResortData.filter(item => {
+                const placeName = item.place_name.toLowerCase();
+                const location = item.location.toLowerCase();
+                const resortID = item.resort_ID ? item.resort_ID.toString().toLowerCase() : '';
+
+                // Check if the place_name contains any number followed by "Nights"
+                const hasNights = /\d+\s*Nights/.test(placeName);
+
+                return (
+                    (placeName.includes(searchQuery.toLowerCase()) ||
+                     location.includes(searchQuery.toLowerCase()) ||
+                     resortID.includes(searchQuery.toLowerCase())) &&
+                    !hasNights // Exclude results with "Nights" in place_name
+                );
+            });
 
             // Save search query and handle navigation
             saveSearchQuery(searchQuery);

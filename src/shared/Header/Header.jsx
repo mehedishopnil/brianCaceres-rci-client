@@ -81,7 +81,7 @@ const Header = () => {
                 ) : (
                   <>
                     <li>
-                      <Link to="/dashboard">
+                      <Link to="/dashboard/overview">
                         <p className="">Dashboard</p>
                       </Link>
                     </li>
