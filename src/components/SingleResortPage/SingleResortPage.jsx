@@ -25,8 +25,13 @@ const SingleResortPage = () => {
 
   useEffect(() => {
     if (currentResort) {
-      const { img, img2, img3 } = currentResort;
-      setAdditionalImages([img, img2, img3].filter(Boolean)); // Filter out null or undefined values
+      // Collect all image URLs dynamically from the currentResort object
+      const images = Object.keys(currentResort)
+        .filter((key) => key.startsWith("img")) // Filter keys that start with "img"
+        .map((key) => currentResort[key]) // Get the image URLs
+        .filter((image) => image); // Filter out null or undefined values
+
+      setAdditionalImages(images);
     }
   }, [currentResort]);
 
