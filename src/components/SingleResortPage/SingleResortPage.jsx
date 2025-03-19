@@ -16,10 +16,22 @@ const SingleResortPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [additional_images, setAdditionalImages] = useState([]);
 
+  // Function to remove "{any amount} Nights" from place_name
+  const cleanPlaceName = (name) => {
+    return name.replace(/\d+\s*Nights/g, "").trim();
+  };
+
   useEffect(() => {
     if (allResortData && id) {
       const foundResort = allResortData.find((resort) => resort._id === id);
-      setCurrentResort(foundResort);
+      if (foundResort) {
+        // Clean the place_name before setting the currentResort
+        const cleanedResort = {
+          ...foundResort,
+          place_name: cleanPlaceName(foundResort.place_name),
+        };
+        setCurrentResort(cleanedResort);
+      }
     }
   }, [allResortData, id]);
 
@@ -88,6 +100,7 @@ const SingleResortPage = () => {
   };
 
   const handleAddToCheckout = () => {
+    // Ensure the cleaned place_name is included in the resort object sent to the checkout page
     navigate("/checkout", { state: { resort: currentResort } });
   };
 

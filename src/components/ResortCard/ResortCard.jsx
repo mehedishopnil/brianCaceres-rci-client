@@ -4,6 +4,15 @@ import { GiStarsStack } from "react-icons/gi";
 const ResortCard = ({ resort }) => {
   const { img, place_name, reviews_amount, location, ownerExclusive } = resort;
 
+  // Function to remove "{any amount} Nights" from place_name
+  const cleanPlaceName = (name) => {
+    // Use regex to remove any number followed by "Nights"
+    return name.replace(/\d+\s*Nights/g, "").trim();
+  };
+
+  // Clean the place_name before rendering
+  const cleanedPlaceName = cleanPlaceName(place_name);
+
   return (
     <div>
       <div className="card h-full bg-white shadow-xl">
@@ -16,7 +25,7 @@ const ResortCard = ({ resort }) => {
 
         <div className="card-body">
           <p>{location}</p>
-          <h2 className="card-title">{place_name}</h2>
+          <h2 className="card-title">{cleanedPlaceName}</h2> {/* Use cleanedPlaceName */}
 
           <div className="flex items-center gap-2">
             <h1>{ownerExclusive}</h1>
@@ -24,7 +33,7 @@ const ResortCard = ({ resort }) => {
 
           {place_name.includes("Wyndham") && (
             <div className="flex items-center gap-2">
-                <GiStarsStack />
+              <GiStarsStack />
               <h1>Wyndham owner exclusive</h1>
             </div>
           )}

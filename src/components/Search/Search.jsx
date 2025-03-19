@@ -26,11 +26,7 @@ const Search = () => {
                         const nameMatch = resort.place_name ? resort.place_name.toLowerCase().includes(searchTerm.toLowerCase()) : false;
                         const locationMatch = resort.location ? resort.location.toLowerCase().includes(searchTerm.toLowerCase()) : false;
                         const idMatch = resort.resort_ID ? resort.resort_ID.toLowerCase().includes(searchTerm.toLowerCase()) : false;
-
-                        // Check if the place_name contains any number followed by "Nights"
-                        const hasNights = resort.place_name ? /\d+\s*Nights/.test(resort.place_name) : false;
-
-                        return (nameMatch || locationMatch || idMatch) && !hasNights; // Exclude results with "Nights" in place_name
+                        return nameMatch || locationMatch || idMatch;
                     });
                     setSearchData(filteredData);
                 } else {
@@ -45,6 +41,19 @@ const Search = () => {
 
         fetchData();
     }, [searchTerm, allResortData]);
+
+    // Function to modify place_name
+    const modifyPlaceName = (place_name) => {
+        // Check if the place_name contains a number followed by "Nights"
+        const regex = /\d+\s*Nights/;
+        if (regex.test(place_name)) {
+            // Replace with "3 Nights" or remove it entirely
+            return place_name.replace(regex, "3 Nights"); // Replace with "3 Nights"
+            // Alternatively, to remove it entirely:
+            // return place_name.replace(regex, "").trim();
+        }
+        return place_name; // Return the original if no match
+    };
 
     return (
         <div className="p-4">
@@ -61,11 +70,18 @@ const Search = () => {
                     <>
                         {searchData.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {searchData.map((resort) => (
-                                    <Link to={`/singleResortPage/${resort._id}`} key={resort._id}>
-                                        <ResortCard resort={resort} />
-                                    </Link>
-                                ))}
+                                {searchData.map((resort) => {
+                                    // Modify the place_name before passing it to ResortCard
+                                    const modifiedResort = {
+                                        ...resort,
+                                        place_name: modifyPlaceName(resort.place_name)
+                                    };
+                                    return (
+                                        <Link to={`/singleResortPage/${resort._id}`} key={resort._id}>
+                                            <ResortCard resort={modifiedResort} />
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         ) : (
                             <p className="text-center mt-4">No Results Found</p>
