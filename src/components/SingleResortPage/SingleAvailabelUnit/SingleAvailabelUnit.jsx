@@ -27,7 +27,7 @@ const SingleAvailableUnit = () => {
     const { selection } = ranges;
     setSelectionRange({
       startDate: selection.startDate,
-      endDate: selection.endDate, // Now it captures any date range
+      endDate: selection.endDate,
       key: "selection",
     });
   };
@@ -107,7 +107,7 @@ const SingleAvailableUnit = () => {
         <div className="text-center mt-5 py-3 shadow-md">
           <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">Studio</h1>
           <button
-            className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
+            className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("studio")}
           >
             Select Date
@@ -117,7 +117,7 @@ const SingleAvailableUnit = () => {
         <div className="text-center mt-5 py-3 shadow-md">
           <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">1 bedroom</h1>
           <button
-            className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
+            className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("1 bedroom")}
           >
             Select Date
@@ -127,7 +127,7 @@ const SingleAvailableUnit = () => {
         <div className="text-center mt-5 py-3 shadow-md">
           <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">2 bedroom</h1>
           <button
-            className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
+            className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("2 bedroom")}
           >
             Select Date
@@ -135,11 +135,11 @@ const SingleAvailableUnit = () => {
         </div>
       </div>
 
-      {/* Date Picker */}
+      {/* Date Picker - Responsive */}
       {isCalendarOpen && (
-        <div className="fixed inset-0 flex flex-col justify-between bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-5">
-            <div className="flex justify-between items-center mb-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-2 md:p-0">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto overflow-auto max-h-[90vh]">
+            <div className="sticky top-0 bg-white p-4 flex justify-between items-center border-b">
               <h2 className="text-lg font-semibold">Select Booking Dates</h2>
               <button
                 className="text-gray-600 hover:text-gray-800"
@@ -148,27 +148,29 @@ const SingleAvailableUnit = () => {
                 Close
               </button>
             </div>
-            <DateRangePicker
-              ranges={[selectionRange]}
-              onChange={handleSelect}
-              minDate={new Date()}
-              maxDate={addDays(new Date(), 365)}
-              direction="vertical"
-              moveRangeOnFirstSelection={false}
-              rangeColors={["#0370ad"]}
-              months={1}
-              className="w-full"
-            />
-            <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-lg mx-auto mb-5">
-              <div className="flex justify-between">
+            <div className="p-2 overflow-auto">
+              <DateRangePicker
+                ranges={[selectionRange]}
+                onChange={handleSelect}
+                minDate={new Date()}
+                maxDate={addDays(new Date(), 365)}
+                direction="vertical"
+                moveRangeOnFirstSelection={false}
+                rangeColors={["#0370ad"]}
+                months={1}
+                className="w-full"
+              />
+            </div>
+            <div className="sticky bottom-0 bg-white p-4 border-t">
+              <div className="flex justify-between gap-2">
                 <button
-                  className="bg-blue-500 text-white py-2 px-4 rounded"
+                  className="bg-blue-500 text-white py-2 px-4 rounded flex-1"
                   onClick={handleShowUnits}
                 >
                   Show Units
                 </button>
                 <button
-                  className="bg-gray-500 text-white py-2 px-4 rounded"
+                  className="bg-gray-500 text-white py-2 px-4 rounded flex-1"
                   onClick={handleClearDate}
                 >
                   Clear Date
