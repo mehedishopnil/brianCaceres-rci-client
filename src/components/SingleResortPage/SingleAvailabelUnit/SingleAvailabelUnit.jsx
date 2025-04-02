@@ -19,21 +19,15 @@ const SingleAvailableUnit = () => {
   const navigate = useNavigate();
   const currentResort = JSON.parse(localStorage.getItem("currentResort"));
 
-  // Ensure currentResort is not null before using it
   if (!currentResort) {
     return <div>Error: No resort data found.</div>;
   }
 
   const handleSelect = (ranges) => {
     const { selection } = ranges;
-    const startDate = new Date(
-      selection.startDate.getFullYear(),
-      selection.startDate.getMonth(),
-      selection.startDate.getDate()
-    );
     setSelectionRange({
-      startDate: startDate,
-      endDate: addDays(startDate, 6),
+      startDate: selection.startDate,
+      endDate: selection.endDate, // Now it captures any date range
       key: "selection",
     });
   };
@@ -63,7 +57,6 @@ const SingleAvailableUnit = () => {
         },
       });
     } else {
-      // User is not logged in, save current path and redirect to login
       navigate("/login", {
         state: { from: location.pathname },
       });
@@ -122,9 +115,7 @@ const SingleAvailableUnit = () => {
         </div>
 
         <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
-            1 bedroom
-          </h1>
+          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">1 bedroom</h1>
           <button
             className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("1 bedroom")}
@@ -134,9 +125,7 @@ const SingleAvailableUnit = () => {
         </div>
 
         <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
-            2 bedroom
-          </h1>
+          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">2 bedroom</h1>
           <button
             className="mt-5 border-2 py-2 px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
             onClick={() => handleDateButtonClick("2 bedroom")}
@@ -146,8 +135,7 @@ const SingleAvailableUnit = () => {
         </div>
       </div>
 
-      {/* Date functions */}
-
+      {/* Date Picker */}
       {isCalendarOpen && (
         <div className="fixed inset-0 flex flex-col justify-between bg-black bg-opacity-50 z-50">
           <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-5">
@@ -164,7 +152,7 @@ const SingleAvailableUnit = () => {
               ranges={[selectionRange]}
               onChange={handleSelect}
               minDate={new Date()}
-              maxDate={addDays(new Date(), 365)} // Optional: Set a maximum date
+              maxDate={addDays(new Date(), 365)}
               direction="vertical"
               moveRangeOnFirstSelection={false}
               rangeColors={["#0370ad"]}
