@@ -210,7 +210,7 @@ const ResortInputForm = () => {
                 value={formData.resort_ID}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
+                
               />
             </div>
             <div>
@@ -243,7 +243,7 @@ const ResortInputForm = () => {
                 value={formData.price_usd}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
+                
               />
             </div>
           </div>
@@ -303,7 +303,7 @@ const ResortInputForm = () => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               >
-                {[5, 6, 7, 8, 9, 10].map(num => (
+                {[ 8, 9, 10].map(num => (
                   <option key={num} value={num}>{num}</option>
                 ))}
               </select>
@@ -340,7 +340,7 @@ const ResortInputForm = () => {
                 value={formData.available_amount}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                required
+                
               />
             </div>
             <div>
