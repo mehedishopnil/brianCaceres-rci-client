@@ -375,6 +375,21 @@ const ResortInputForm = () => {
             <div className="border p-4 rounded-lg">
               <h4 className="font-medium mb-3">Standard Room</h4>
               <div className="space-y-3">
+
+
+                {/* Room Description */}
+                <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700">Room Description</label>
+              <textarea
+                name="room_Description"
+                value={formData.room_details.room_Description}
+                onChange={handleRoomDetailsChange}
+                rows={3}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Sleeps</label>
                   <select
