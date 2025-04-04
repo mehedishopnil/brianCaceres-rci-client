@@ -7,7 +7,7 @@ import GuestInfo from "./GuestInfo";
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resort, startDate, endDate, unitType, price } = location.state || {};
+  const { resort, startDate, endDate, unitType, price, points, paymentMethod } = location.state || {};
   const [selectedOption, setSelectedOption] = useState(null);
   const [guestInfo, setGuestInfo] = useState(null);
 
@@ -39,6 +39,13 @@ const Checkout = () => {
 
   const { bath, kitchen, privacy_room_amount, sleeps_room } = getRoomDetails();
 
+  // Calculate number of nights
+  const calculateNights = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  };
+
   // Function to handle the continue button click
   const handleContinue = () => {
     if (selectedOption) {
@@ -53,7 +60,10 @@ const Checkout = () => {
         startDate,
         endDate,
         unitType,
-        price,  
+        price: paymentMethod === 'cash' ? price : 0,
+        points: paymentMethod === 'points' ? points : 0,
+        paymentMethod,
+        nights: calculateNights(),
         isGuest: selectedOption === "A Guest" ? "True" : "False",
         guestInfo: selectedOption === "A Guest" ? guestInfo : null,
       };
@@ -84,7 +94,7 @@ const Checkout = () => {
               Travel Dates:{" "}
               <span className="font-semibold">
                 {new Date(startDate).toLocaleDateString()} -{" "}
-                {new Date(endDate).toLocaleDateString()}
+                {new Date(endDate).toLocaleDateString()} ({calculateNights()} nights)
               </span>
             </p>
             <div className="md:flex gap-5">
@@ -115,7 +125,27 @@ const Checkout = () => {
         </div>
       </div>
 
-      <div className="mt-10 shadow-md">
+      {/* Payment Method Display */}
+      <div className="mt-6 p-4 shadow-md">
+        <h1 className="text-xl font-bold mb-2">Payment Method</h1>
+        <div className="p-3 bg-gray-50 rounded">
+          {paymentMethod === 'cash' ? (
+            <div>
+              <p className="font-semibold">Cash Payment</p>
+              <p>${price} USD + tax per night</p>
+              <p className="font-bold mt-1">Total: ${(price * calculateNights()).toFixed(2)} USD + tax</p>
+            </div>
+          ) : (
+            <div>
+              <p className="font-semibold">RCI Points Payment</p>
+              <p>7,000 points per night</p>
+              <p className="font-bold mt-1">Total: {points} points</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-6 shadow-md">
         <h1 className="text-2xl font-bold p-4 bg-[#e6f8fc]">Who's Checking-in?</h1>
         <div>
           <div className="flex justify-center w-full gap-5 p-4">
@@ -135,8 +165,6 @@ const Checkout = () => {
               <FaUserTie className="text-6xl" />
               <h1 className="font-semibold pt-2">A Guest</h1>
               {selectedOption === "A Guest" && <FaCheckCircle className="text-green-500 mt-2" />}
-              {/* When user will select a guest then this form will show below of the options */}
-              
             </div>
           </div>
           {selectedOption === "A Guest" && <GuestInfo onGuestInfoChange={setGuestInfo} />}
@@ -150,18 +178,22 @@ const Checkout = () => {
       </div>
 
       {/* Continue to the payment Section */}
-      <div className="md:grid grid-cols-2 items-center justify-between px-4 py-4 h-auto z-50 sticky bottom-0  bg-slate-100">
+      <div className="md:grid grid-cols-2 items-center justify-between px-4 py-4 h-auto z-50 sticky bottom-0 bg-slate-100">
         <div className="flex justify-between font-semibold py-2 gap-10 row-span-1">
           <h1>View RCI Charges</h1>
-          <h1 className="text-sm"> <span className="text-lg">${price}</span> USD + TAX</h1>
+          {paymentMethod === 'cash' ? (
+            <h1 className="text-sm">Total: <span className="text-lg">${(price * calculateNights()).toFixed(2)}</span> USD + TAX</h1>
+          ) : (
+            <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
+          )}
         </div>
 
         <div className="flex w-full row-span-1">
           <button
-            className="w-full py-2 rounded font-bold bg-yellow-400"
+            className="w-full py-2 rounded font-bold bg-yellow-400 hover:bg-yellow-500"
             onClick={handleContinue}
           >
-            Continue
+            {paymentMethod === 'cash' ? 'Continue to Payment' : 'Redeem Points'}
           </button>
         </div>
       </div>
