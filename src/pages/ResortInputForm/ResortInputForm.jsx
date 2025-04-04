@@ -21,31 +21,30 @@ const ResortInputForm = () => {
     place_name: "",
     price_usd: "",
     resort_details: "",
-    check_in_time: "",
-    check_out_time: "",
-    rating: getRandomNumber(7, 9).toString(), // Random between 7-9
-    stateRating: "RCI Gold Crown", // Default value
-    ownerExclusive: "Owner Exclusive", // Default value
-    available_amount: "",
-    reviews_amount: getRandomNumber(80, 800).toString(), // Random between 80-800
+    check_in_time: "16:00",
+    check_out_time: "11:00",
+    rating: getRandomNumber(8, 10).toString(),
+    stateRating: "RCI Gold Crown",
+    ownerExclusive: "Owner Exclusive",
+    available_amount: "5",
+    reviews_amount: getRandomNumber(80, 800).toString(),
     room_details: {
       room_Description: "",
-      sleeps_room: "2", // Default value
-      privacy_room_amount: "2", // Default value
-      kitchen: "Full", // Default value
-      bath: "Full", // Default value
-      studio_sleeps_room: "2", // Default value
-      studio_privacy_room_amount: "2", // Default value
-      studio_kitchen: "Partial", // Default value
-      studio_bath: "Full", // Default value
-      hotel_room: "2", // Default value
-      hotel_privacy_room_amount: "2", // Default value
-      hotel_kitchen: "No", // Default value
-      hotel_bath: "Full", // Default value
+      sleeps_room: "2",
+      privacy_room_amount: "2",
+      kitchen: "Full",
+      bath: "Full",
+      studio_sleeps_room: "2",
+      studio_privacy_room_amount: "2",
+      studio_kitchen: "Partial",
+      studio_bath: "Full",
+      hotel_room: "2",
+      hotel_privacy_room_amount: "2",
+      hotel_kitchen: "No",
+      hotel_bath: "Full",
     },
   });
 
-  // If you need to regenerate random values when the component mounts or at other times
   useEffect(() => {
     setFormData(prev => ({
       ...prev,
@@ -103,12 +102,12 @@ const ResortInputForm = () => {
         place_name: "",
         price_usd: "",
         resort_details: "",
-        check_in_time: "",
-        check_out_time: "",
+        check_in_time: "3:00 PM",
+        check_out_time: "11:00 AM",
         rating: getRandomNumber(7, 9).toString(),
         stateRating: "RCI Gold Crown",
         ownerExclusive: "Owner Exclusive",
-        available_amount: "",
+        available_amount: "5",
         reviews_amount: getRandomNumber(80, 800).toString(),
         room_details: {
           room_Description: "",
@@ -127,7 +126,6 @@ const ResortInputForm = () => {
         },
       });
 
-      // Show success popup
       Swal.fire({
         position: "center",
         icon: "success",
@@ -139,13 +137,11 @@ const ResortInputForm = () => {
       console.log("Form data submitted successfully");
     } catch (error) {
       console.error("Error submitting form data:", error);
-      // Show error popup
       Swal.fire({
         position: "center",
         icon: "error",
         title: "Oops...",
         text: "Something went wrong!",
-        footer: '<a href="#">Why do I have this issue?</a>',
       });
     }
   };
@@ -172,49 +168,371 @@ const ResortInputForm = () => {
     </option>
   ));
 
+  // Options for state rating
+  const stateRatingOptions = [
+    "RCI Gold Crown",
+    "RCI Silver Crown",
+    "RCI Hospitality",
+  ].map((option) => (
+    <option key={option} value={option}>
+      {option}
+    </option>
+  ));
+
+  // Options for owner exclusive
+  const ownerExclusiveOptions = [
+    "Owner Exclusive",
+    "Member Exclusive",
+    "Public Resort",
+  ].map((option) => (
+    <option key={option} value={option}>
+      {option}
+    </option>
+  ));
+
   return (
-    <div className="max-w-md p-4 mx-auto my-5">
-      <h2 className="text-xl text-center font-semibold mb-4">
+    <div className="max-w-4xl mx-auto my-5 p-4">
+      <h2 className="text-2xl text-center font-semibold mb-6">
         Resort Input Form
       </h2>
-      <h1>Total Data: {allResortData.length}</h1>
-      <form onSubmit={handleSubmit} className="drop-shadow-sm border rounded p-4">
-        {/* Rest of your form fields remain the same */}
-        {/* They will now show the default values we set in the initial state */}
-        
-        {/* Example of how a field will now show the default value */}
-        {/* Rating field - will show random value between 7-9 */}
-        <div className="mb-4">
-          <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
-            Rating
-          </label>
-          <select
-            id="rating"
-            name="rating"
-            value={formData.rating}
-            onChange={handleChange}
-            className="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          >
-            <option value="">Select the Rating</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
+      <h3 className="text-lg mb-4">Total Resorts in System: {allResortData.length}</h3>
+      
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+        {/* Basic Information Section */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-medium mb-4">Basic Information</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Resort ID</label>
+              <input
+                type="text"
+                name="resort_ID"
+                value={formData.resort_ID}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Resort Name</label>
+              <input
+                type="text"
+                name="place_name"
+                value={formData.place_name}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Location</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Price (USD)</label>
+              <input
+                type="number"
+                name="price_usd"
+                value={formData.price_usd}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+          </div>
         </div>
 
-        {/* All other form fields remain exactly the same */}
-        {/* They will automatically show the default values we set in the initial state */}
-        
+        {/* Images Section */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-medium mb-4">Image URLs</h3>
+          <div className="space-y-4">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <div key={num}>
+                <label className="block text-sm font-medium text-gray-700">Image {num} URL</label>
+                <input
+                  type="url"
+                  name={num === 1 ? "img" : `img${num}`}
+                  value={formData[num === 1 ? "img" : `img${num}`]}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Resort Details Section */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-medium mb-4">Resort Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Check-in Time</label>
+              <input
+                type="text"
+                name="check_in_time"
+                value={formData.check_in_time}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Check-out Time</label>
+              <input
+                type="text"
+                name="check_out_time"
+                value={formData.check_out_time}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Rating</label>
+              <select
+                name="rating"
+                value={formData.rating}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              >
+                {[5, 6, 7, 8, 9, 10].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">State Rating</label>
+              <select
+                name="stateRating"
+                value={formData.stateRating}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              >
+                {stateRatingOptions}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Owner Exclusive</label>
+              <select
+                name="ownerExclusive"
+                value={formData.ownerExclusive}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              >
+                {ownerExclusiveOptions}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Available Units</label>
+              <input
+                type="number"
+                name="available_amount"
+                value={formData.available_amount}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Reviews Amount</label>
+              <input
+                type="number"
+                name="reviews_amount"
+                value={formData.reviews_amount}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700">Resort Description</label>
+              <textarea
+                name="resort_details"
+                value={formData.resort_details}
+                onChange={handleChange}
+                rows={3}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Room Details Section */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-medium mb-4">Room Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Standard Room */}
+            <div className="border p-4 rounded-lg">
+              <h4 className="font-medium mb-3">Standard Room</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Sleeps</label>
+                  <select
+                    name="sleeps_room"
+                    value={formData.room_details.sleeps_room}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {numberOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Privacy Rooms</label>
+                  <select
+                    name="privacy_room_amount"
+                    value={formData.room_details.privacy_room_amount}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {numberOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Kitchen</label>
+                  <select
+                    name="kitchen"
+                    value={formData.room_details.kitchen}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {kitchenBathOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Bath</label>
+                  <select
+                    name="bath"
+                    value={formData.room_details.bath}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {kitchenBathOptions}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Studio Room */}
+            <div className="border p-4 rounded-lg">
+              <h4 className="font-medium mb-3">Studio Room</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Sleeps</label>
+                  <select
+                    name="studio_sleeps_room"
+                    value={formData.room_details.studio_sleeps_room}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {numberOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Privacy Rooms</label>
+                  <select
+                    name="studio_privacy_room_amount"
+                    value={formData.room_details.studio_privacy_room_amount}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {numberOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Kitchen</label>
+                  <select
+                    name="studio_kitchen"
+                    value={formData.room_details.studio_kitchen}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {kitchenBathOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Bath</label>
+                  <select
+                    name="studio_bath"
+                    value={formData.room_details.studio_bath}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {kitchenBathOptions}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Hotel Room */}
+            <div className="border p-4 rounded-lg">
+              <h4 className="font-medium mb-3">Hotel Room</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Sleeps</label>
+                  <select
+                    name="hotel_room"
+                    value={formData.room_details.hotel_room}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {numberOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Privacy Rooms</label>
+                  <select
+                    name="hotel_privacy_room_amount"
+                    value={formData.room_details.hotel_privacy_room_amount}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {numberOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Kitchen</label>
+                  <select
+                    name="hotel_kitchen"
+                    value={formData.room_details.hotel_kitchen}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {kitchenBathOptions}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Bath</label>
+                  <select
+                    name="hotel_bath"
+                    value={formData.room_details.hotel_bath}
+                    onChange={handleRoomDetailsChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {kitchenBathOptions}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Submit Button */}
-        <div className="mt-6">
+        <div className="flex justify-end">
           <button
             type="submit"
-            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Submit
+            Submit Resort Data
           </button>
         </div>
       </form>
