@@ -77,7 +77,7 @@ const AvailableBooking = () => {
 
   return (
     <div className="p-4">
-      <div className="w-full text-right mb-2 text-red-500 font-semibold">
+      <div className="w-full text-center mb-2 text-red-500 font-semibold">
         Time remaining: {formatTime(timeLeft)}
       </div>
       <h1 className="text-center text-2xl font-semibold">
