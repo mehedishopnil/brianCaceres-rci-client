@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import Modal from 'react-modal';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const AvailableBooking = () => {
   const location = useLocation();
@@ -11,7 +11,7 @@ const AvailableBooking = () => {
   const { resort, startDate, endDate, unitType } = location.state;
   const [timeLeft, setTimeLeft] = useState(8 * 60); // 8 minutes in seconds
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash' or 'points'
+  const [paymentMethod, setPaymentMethod] = useState("cash"); // 'cash' or 'points'
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -28,14 +28,14 @@ const AvailableBooking = () => {
 
   const getPrice = (unitType) => {
     switch (unitType) {
-      case 'studio':
-        return 309.00;
-      case '1 bedroom':
-        return 339.00;
-      case '2 bedroom':
-        return 379.00;
+      case "studio":
+        return 309.0;
+      case "1 bedroom":
+        return 339.0;
+      case "2 bedroom":
+        return 379.0;
       default:
-        return 0.00;
+        return 0.0;
     }
   };
 
@@ -53,8 +53,8 @@ const AvailableBooking = () => {
         startDate,
         endDate,
         unitType,
-        price: paymentMethod === 'cash' ? getPrice(unitType) : 0,
-        points: paymentMethod === 'points' ? calculateTotalPoints() : 0,
+        price: paymentMethod === "cash" ? getPrice(unitType) : 0,
+        points: paymentMethod === "points" ? calculateTotalPoints() : 0,
         paymentMethod,
       },
     });
@@ -72,19 +72,21 @@ const AvailableBooking = () => {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   return (
-    <div className='p-4'>
-      <h1 className='text-center text-2xl font-semibold'>Available Unit (<span className="text-[#0370ad]">3+</span>) </h1>
-      <div className='flex flex-col space-y-2 justify-center items-center p-4 shadow-lg'>
-        <div className="w-full text-right mb-2 text-red-500 font-semibold">
-          Time remaining: {formatTime(timeLeft)}
-        </div>
+    <div className="p-4">
+      <div className="w-full text-right mb-2 text-red-500 font-semibold">
+        Time remaining: {formatTime(timeLeft)}
+      </div>
+      <h1 className="text-center text-2xl font-semibold">
+        Available Unit (<span className="text-[#0370ad]">3+</span>){" "}
+      </h1>
+      <div className="flex flex-col space-y-2 justify-center items-center p-4 shadow-lg">
         <h2>{resort.place_name}</h2>
-        <h2 className='text-3xl text-[#0370ad]'>{unitType}</h2>
-        
+        <h2 className="text-3xl text-[#0370ad]">{unitType}</h2>
+
         <div className="w-full my-4">
           <label className="block mb-2 font-medium">Payment Method:</label>
           <div className="flex flex-col space-y-2">
@@ -94,8 +96,8 @@ const AvailableBooking = () => {
                 className="form-radio h-5 w-5 text-[#0370ad]"
                 name="paymentMethod"
                 value="cash"
-                checked={paymentMethod === 'cash'}
-                onChange={() => setPaymentMethod('cash')}
+                checked={paymentMethod === "cash"}
+                onChange={() => setPaymentMethod("cash")}
               />
               <span className="ml-2 text-lg">
                 Pay with Cash: ${getPrice(unitType)} USD + tax per night
@@ -107,8 +109,8 @@ const AvailableBooking = () => {
                 className="form-radio h-5 w-5 text-[#0370ad]"
                 name="paymentMethod"
                 value="points"
-                checked={paymentMethod === 'points'}
-                onChange={() => setPaymentMethod('points')}
+                checked={paymentMethod === "points"}
+                onChange={() => setPaymentMethod("points")}
               />
               <span className="ml-2 text-lg">
                 Pay with Points: 7,000 RCI Points per night
@@ -124,12 +126,12 @@ const AvailableBooking = () => {
 
         <h2>Start Date: {new Date(startDate).toLocaleDateString()}</h2>
         <h2>End Date: {new Date(endDate).toLocaleDateString()}</h2>
-        
+
         <button
           className="w-full text-lg bg-[#ffc445] hover:bg-[#ffbd42] text-gray-800 font-bold py-2 px-4 rounded mt-4"
           onClick={handleBookNow}
         >
-          {paymentMethod === 'cash' ? 'Book Now' : 'Redeem Points'}
+          {paymentMethod === "cash" ? "Book Now" : "Redeem Points"}
         </button>
       </div>
 
