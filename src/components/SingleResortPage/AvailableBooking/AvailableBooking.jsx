@@ -128,7 +128,7 @@ const AvailableBooking = () => {
               <span className="ml-2 text-lg">
                 Pay with Points: {getPoints(unitType).toLocaleString()} RCI Points
                 <span className="block text-sm text-gray-600">
-                  (Total for your stay)
+                  (Total per night)
                 </span>
               </span>
             </label>
