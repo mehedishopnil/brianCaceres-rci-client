@@ -182,7 +182,7 @@ const Checkout = () => {
         <div className="flex justify-between font-semibold py-2 gap-10 row-span-1">
           <h1>View RCI Charges</h1>
           {paymentMethod === 'cash' ? (
-            <h1 className="text-sm">Total: <span className="text-lg">${(price * calculateNights()).toFixed(2)}</span> USD + TAX</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">${(price * calculateNights()).toFixed(2)}</span> USD</h1>
           ) : (
             <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
           )}

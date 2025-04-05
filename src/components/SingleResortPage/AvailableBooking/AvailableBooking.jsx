@@ -100,7 +100,7 @@ const AvailableBooking = () => {
                 onChange={() => setPaymentMethod("cash")}
               />
               <span className="ml-2 text-lg">
-                Pay with Cash: ${getPrice(unitType)} USD + tax per night
+                Pay with Cash: ${getPrice(unitType)} USD
               </span>
             </label>
             <label className="inline-flex items-center">

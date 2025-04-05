@@ -72,6 +72,15 @@ const SingleAvailableUnit = () => {
     setIsCalendarOpen(false);
   };
 
+  // Array of unit types for cleaner rendering
+  const unitTypes = [
+    "studio",
+    "1 bedroom",
+    "2 bedroom",
+    "3 bedroom",
+    "4 bedroom"
+  ];
+
   return (
     <div className="mt-10">
       <div className="hidden md:flex justify-center text-4xl text-white py-6 bg-[#037092]">
@@ -104,35 +113,21 @@ const SingleAvailableUnit = () => {
 
       <div>
         <h1 className="text-center text-xl font-semibold"> Available Units </h1>
-        <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">Studio</h1>
-          <button
-            className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
-            onClick={() => handleDateButtonClick("studio")}
-          >
-            Select Date
-          </button>
-        </div>
-
-        <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">1 bedroom</h1>
-          <button
-            className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
-            onClick={() => handleDateButtonClick("1 bedroom")}
-          >
-            Select Date
-          </button>
-        </div>
-
-        <div className="text-center mt-5 py-3 shadow-md">
-          <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">2 bedroom</h1>
-          <button
-            className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
-            onClick={() => handleDateButtonClick("2 bedroom")}
-          >
-            Select Date
-          </button>
-        </div>
+        
+        {/* Map through unit types for consistent rendering */}
+        {unitTypes.map((unitType) => (
+          <div key={unitType} className="text-center mt-5 py-3 shadow-md">
+            <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
+              {unitType.charAt(0).toUpperCase() + unitType.slice(1)}
+            </h1>
+            <button
+              className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
+              onClick={() => handleDateButtonClick(unitType)}
+            >
+              Select Date
+            </button>
+          </div>
+        ))}
       </div>
 
       {/* Date Picker - Responsive */}
