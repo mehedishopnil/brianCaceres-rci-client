@@ -27,7 +27,6 @@ const Checkout = () => {
         sleeps_room: room_details.studio_sleeps_room,
       };
     } else {
-      // Assuming unitType can only be 'studio' or 'bedroom'
       return {
         bath: room_details.bath,
         kitchen: room_details.kitchen,
@@ -39,12 +38,15 @@ const Checkout = () => {
 
   const { bath, kitchen, privacy_room_amount, sleeps_room } = getRoomDetails();
 
-  // Calculate number of nights
+  // Calculate number of nights (for display only)
   const calculateNights = () => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
+
+  // Fixed price for all unit types
+  const fixedPrice = 379.00;
 
   // Function to handle the continue button click
   const handleContinue = () => {
@@ -60,10 +62,9 @@ const Checkout = () => {
         startDate,
         endDate,
         unitType,
-        price: paymentMethod === 'cash' ? price : 0,
+        price: paymentMethod === 'cash' ? fixedPrice : 0,
         points: paymentMethod === 'points' ? points : 0,
         paymentMethod,
-        nights: calculateNights(),
         isGuest: selectedOption === "A Guest" ? "True" : "False",
         guestInfo: selectedOption === "A Guest" ? guestInfo : null,
       };
@@ -105,22 +106,6 @@ const Checkout = () => {
                 Check-out: <span className="font-semibold">{check_out_time}</span>
               </p>
             </div>
-
-            {/* Display room details based on unitType */}
-            {/* <div className="md:grid grid-cols-2 gap-2 font-semibold text-lg text-gray-500">
-              <p className="flex gap-2 items-center ">
-                <MdBathtub /> {bath}
-              </p>
-              <p className="flex gap-2 items-center">
-                <MdKitchen /> {kitchen} Kitchen
-              </p>
-              <p className="flex gap-2 items-center">
-                <MdMeetingRoom /> {privacy_room_amount} Privacy
-              </p>
-              <p className="flex gap-2 items-center">
-                <FaBed /> {sleeps_room} Sleep
-              </p>
-            </div> */}
           </div>
         </div>
       </div>
@@ -132,14 +117,12 @@ const Checkout = () => {
           {paymentMethod === 'cash' ? (
             <div>
               <p className="font-semibold">Cash Payment</p>
-              <p>${price} USD + tax per night</p>
-              <p className="font-bold mt-1">Total: ${(price * calculateNights()).toFixed(2)} USD + tax</p>
+              <p className="font-bold">Total: ${fixedPrice.toFixed(2)} USD (flat rate)</p>
             </div>
           ) : (
             <div>
               <p className="font-semibold">RCI Points Payment</p>
-              <p>7,000 points per night</p>
-              <p className="font-bold mt-1">Total: {points} points</p>
+              <p className="font-bold">Total: {points} points</p>
             </div>
           )}
         </div>
@@ -182,7 +165,7 @@ const Checkout = () => {
         <div className="flex justify-between font-semibold py-2 gap-10 row-span-1">
           <h1>View RCI Charges</h1>
           {paymentMethod === 'cash' ? (
-            <h1 className="text-sm">Total: <span className="text-lg">${(price * calculateNights()).toFixed(2)}</span> USD</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">${fixedPrice.toFixed(2)}</span> USD</h1>
           ) : (
             <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
           )}
