@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
 
 const AvailableBooking = () => {
@@ -29,21 +28,35 @@ const AvailableBooking = () => {
   const getPrice = (unitType) => {
     switch (unitType) {
       case "studio":
-        return 309.0;
+        return 309.0; // Weekly price
       case "1 bedroom":
-        return 339.0;
+        return 339.0; // Weekly price
       case "2 bedroom":
-        return 379.0;
+        return 379.0; // Weekly price
+      case "3 bedroom":
+        return 379.0; // Weekly price
+      case "4 bedroom":
+        return 379.0; // Weekly price
       default:
         return 0.0;
     }
   };
 
-  const calculateTotalPoints = () => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-    return nights * 7000;
+  const getPoints = (unitType) => {
+    switch (unitType) {
+      case "studio":
+        return 5500; // Total points for stay
+      case "1 bedroom":
+        return 7500; // Total points for stay
+      case "2 bedroom":
+        return 9500; // Total points for stay
+      case "3 bedroom":
+        return 12500; // Updated to 12,500 points
+      case "4 bedroom":
+        return 14000; // Updated to 14,000 points
+      default:
+        return 0;
+    }
   };
 
   const handleBookNow = () => {
@@ -54,7 +67,7 @@ const AvailableBooking = () => {
         endDate,
         unitType,
         price: paymentMethod === "cash" ? getPrice(unitType) : 0,
-        points: paymentMethod === "points" ? calculateTotalPoints() : 0,
+        points: paymentMethod === "points" ? getPoints(unitType) : 0,
         paymentMethod,
       },
     });
@@ -100,7 +113,7 @@ const AvailableBooking = () => {
                 onChange={() => setPaymentMethod("cash")}
               />
               <span className="ml-2 text-lg">
-                Pay with Cash: ${getPrice(unitType)} USD
+                Pay with Cash: ${getPrice(unitType)} USD (weekly rate)
               </span>
             </label>
             <label className="inline-flex items-center">
@@ -113,12 +126,10 @@ const AvailableBooking = () => {
                 onChange={() => setPaymentMethod("points")}
               />
               <span className="ml-2 text-lg">
-                Pay with Points: 7,000 RCI Points per night
-                {startDate && endDate && (
-                  <span className="block text-sm text-gray-600">
-                    Total: {calculateTotalPoints()} points for your stay
-                  </span>
-                )}
+                Pay with Points: {getPoints(unitType).toLocaleString()} RCI Points
+                <span className="block text-sm text-gray-600">
+                  (Total for your stay)
+                </span>
               </span>
             </label>
           </div>

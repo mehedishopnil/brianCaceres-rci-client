@@ -107,7 +107,7 @@ const Checkout = () => {
             </div>
 
             {/* Display room details based on unitType */}
-            <div className="md:grid grid-cols-2 gap-2 font-semibold text-lg text-gray-500">
+            {/* <div className="md:grid grid-cols-2 gap-2 font-semibold text-lg text-gray-500">
               <p className="flex gap-2 items-center ">
                 <MdBathtub /> {bath}
               </p>
@@ -120,7 +120,7 @@ const Checkout = () => {
               <p className="flex gap-2 items-center">
                 <FaBed /> {sleeps_room} Sleep
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
