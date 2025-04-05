@@ -30,7 +30,7 @@ const AvailableBooking = () => {
       case "studio":
         return 309.0; // Weekly price
       case "1 bedroom":
-        return 339.0; // Weekly price
+        return 379.0 ; // Weekly price
       case "2 bedroom":
         return 379.0; // Weekly price
       case "3 bedroom":
