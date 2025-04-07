@@ -7,7 +7,7 @@ import GuestInfo from "./GuestInfo";
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resort, startDate, endDate, unitType, price, points, paymentMethod } = location.state || {};
+  const { resort, startDate, endDate, unitType, price, paymentMethod } = location.state || {};
   const [selectedOption, setSelectedOption] = useState(null);
   const [guestInfo, setGuestInfo] = useState(null);
 
@@ -38,11 +38,34 @@ const Checkout = () => {
 
   const { bath, kitchen, privacy_room_amount, sleeps_room } = getRoomDetails();
 
-  // Calculate number of nights (for display only)
+  // Calculate number of nights
   const calculateNights = () => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  };
+
+  // Get points per night based on unit type
+  const getPointsPerNight = () => {
+    switch (unitType) {
+      case "studio":
+        return 1000;
+      case "1 bedroom":
+        return 1500;
+      case "2 bedroom":
+        return 2000;
+      case "3 bedroom":
+        return 2500;
+      case "4 bedroom":
+        return 3000;
+      default:
+        return 0;
+    }
+  };
+
+  // Calculate total points for the stay
+  const calculateTotalPoints = () => {
+    return calculateNights() * getPointsPerNight();
   };
 
   // Fixed price for all unit types
@@ -63,7 +86,7 @@ const Checkout = () => {
         endDate,
         unitType,
         price: paymentMethod === 'cash' ? fixedPrice : 0,
-        points: paymentMethod === 'points' ? points : 0,
+        points: paymentMethod === 'points' ? calculateTotalPoints() : 0,
         paymentMethod,
         isGuest: selectedOption === "A Guest" ? "True" : "False",
         guestInfo: selectedOption === "A Guest" ? guestInfo : null,
@@ -122,7 +145,8 @@ const Checkout = () => {
           ) : (
             <div>
               <p className="font-semibold">RCI Points Payment</p>
-              <p className="font-bold">Total: {points} points</p>
+              <p>{getPointsPerNight()} points per night × {calculateNights()} nights</p>
+              <p className="font-bold mt-1">Total: {calculateTotalPoints()} points</p>
             </div>
           )}
         </div>
@@ -167,7 +191,7 @@ const Checkout = () => {
           {paymentMethod === 'cash' ? (
             <h1 className="text-sm">Total: <span className="text-lg">${fixedPrice.toFixed(2)}</span> USD</h1>
           ) : (
-            <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">{calculateTotalPoints()}</span> RCI Points</h1>
           )}
         </div>
 
