@@ -71,8 +71,21 @@ const SingleAvailableUnit = () => {
     }
   };
 
-  // Fixed price for cash payments
-  const getFixedPrice = () => 379.00;
+  // Fixed price for Last Call vacations based on unit type
+  const getFixedPrice = (unitType) => {
+    switch (unitType) {
+      case "studio":
+        return 309;
+      case "1 bedroom":
+        return 339;
+      case "2 bedroom":
+      case "3 bedroom":
+      case "4 bedroom":
+        return 379;
+      default:
+        return 0;
+    }
+  };
 
   // Calculate number of nights
   const calculateNights = () => {
@@ -102,6 +115,7 @@ const SingleAvailableUnit = () => {
 
     if (user) {
       const totalPoints = calculateTotalPoints();
+      const price = vacationType === 'lastCall' ? getFixedPrice(selectedUnit) : 0;
       
       navigate("/available-booking", {
         state: {
@@ -110,10 +124,10 @@ const SingleAvailableUnit = () => {
           endDate: selectionRange.endDate,
           unitType: selectedUnit,
           vacationType,
-          price: vacationType === 'lastCall' ? getFixedPrice() : 0,
+          price,
           points: vacationType === 'rciPoints' ? totalPoints : 0,
           paymentMethod: vacationType === 'lastCall' ? 'cash' : 'points',
-          totalPoints, // Explicitly sending totalPoints
+          totalPoints,
           nights: calculateNights(),
           pointsPerNight: getPointsPerNight(selectedUnit)
         },
@@ -171,7 +185,7 @@ const SingleAvailableUnit = () => {
               </p>
             ) : (
               <p className="text-lg font-semibold">
-                ${getFixedPrice()} (flat rate)
+                ${getFixedPrice(unitType)} (flat rate)
               </p>
             )}
             <button
@@ -218,7 +232,7 @@ const SingleAvailableUnit = () => {
                   {vacationType === "rciPoints" ? (
                     `Show Units (${calculateTotalPoints()} points)`
                   ) : (
-                    `Show Units ($${getFixedPrice()})`
+                    `Show Units ($${getFixedPrice(selectedUnit)})`
                   )}
                 </button>
                 <button
