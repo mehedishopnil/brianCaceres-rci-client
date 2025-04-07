@@ -19,11 +19,8 @@ const SingleAvailableUnit = () => {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const navigate = useNavigate();
   const currentResort = JSON.parse(localStorage.getItem("currentResort"));
-  
-  // Get vacation type from location state or localStorage
-  const vacationType = location.state?.vacationType || 
-                      currentResort?.vacationType || 
-                      'rciPoints'; // default to rciPoints
+
+  const vacationType = location.state?.vacationType || currentResort?.vacationType || "rciPoints";
 
   if (!currentResort) {
     return <div>Error: No resort data found.</div>;
@@ -47,29 +44,6 @@ const SingleAvailableUnit = () => {
     setIsCalendarOpen(false);
   };
 
-  const handleShowUnits = () => {
-    if (!currentResort) {
-      console.error("Error: No currentResort data available.");
-      return;
-    }
-
-    if (user) {
-      navigate("/available-booking", {
-        state: {
-          resort: currentResort,
-          startDate: selectionRange.startDate,
-          endDate: selectionRange.endDate,
-          unitType: selectedUnit,
-          vacationType: vacationType // Pass vacation type to next page
-        },
-      });
-    } else {
-      navigate("/login", {
-        state: { from: location.pathname },
-      });
-    }
-  };
-
   const handleClearDate = () => {
     setSelectionRange({
       startDate: new Date(),
@@ -83,21 +57,21 @@ const SingleAvailableUnit = () => {
   const getPointsPerNight = (unitType) => {
     switch (unitType) {
       case "studio":
-        return 1000;
+        return 7000;
       case "1 bedroom":
-        return 1500;
+        return 7000;
       case "2 bedroom":
-        return 2000;
+        return 9000;
       case "3 bedroom":
-        return 2500;
+        return 10500;
       case "4 bedroom":
-        return 3000;
+        return 12500;
       default:
         return 0;
     }
   };
 
-  // Fixed price for all unit types (for Last Call)
+  // Fixed price for cash payments
   const getFixedPrice = () => 379.00;
 
   // Calculate number of nights
@@ -112,14 +86,44 @@ const SingleAvailableUnit = () => {
     return calculateNights() * getPointsPerNight(selectedUnit);
   };
 
-  // Array of unit types for cleaner rendering
   const unitTypes = [
     "studio",
     "1 bedroom",
     "2 bedroom",
     "3 bedroom",
-    "4 bedroom"
+    "4 bedroom",
   ];
+
+  const handleShowUnits = () => {
+    if (!currentResort) {
+      console.error("Error: No currentResort data available.");
+      return;
+    }
+
+    if (user) {
+      const totalPoints = calculateTotalPoints();
+      
+      navigate("/available-booking", {
+        state: {
+          resort: currentResort,
+          startDate: selectionRange.startDate,
+          endDate: selectionRange.endDate,
+          unitType: selectedUnit,
+          vacationType,
+          price: vacationType === 'lastCall' ? getFixedPrice() : 0,
+          points: vacationType === 'rciPoints' ? totalPoints : 0,
+          paymentMethod: vacationType === 'lastCall' ? 'cash' : 'points',
+          totalPoints, // Explicitly sending totalPoints
+          nights: calculateNights(),
+          pointsPerNight: getPointsPerNight(selectedUnit)
+        },
+      });
+    } else {
+      navigate("/login", {
+        state: { from: location.pathname },
+      });
+    }
+  };
 
   return (
     <div className="mt-10">
@@ -153,16 +157,15 @@ const SingleAvailableUnit = () => {
 
       <div>
         <h1 className="text-center text-xl font-semibold">
-          {vacationType === 'rciPoints' ? 'RCI Points Vacations' : 'Last Call Vacations'}
+          {vacationType === "rciPoints" ? "RCI Points Vacations" : "Last Call Vacations"}
         </h1>
         
-        {/* Map through unit types for consistent rendering */}
         {unitTypes.map((unitType) => (
           <div key={unitType} className="text-center mt-5 py-3 shadow-md">
             <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
               {unitType.charAt(0).toUpperCase() + unitType.slice(1)}
             </h1>
-            {vacationType === 'rciPoints' ? (
+            {vacationType === "rciPoints" ? (
               <p className="text-lg font-semibold">
                 {getPointsPerNight(unitType)} points per night
               </p>
@@ -181,7 +184,6 @@ const SingleAvailableUnit = () => {
         ))}
       </div>
 
-      {/* Date Picker - Responsive */}
       {isCalendarOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-2 md:p-0">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto overflow-auto max-h-[90vh]">
@@ -213,7 +215,7 @@ const SingleAvailableUnit = () => {
                   className="bg-blue-500 text-white py-2 px-4 rounded flex-1"
                   onClick={handleShowUnits}
                 >
-                  {vacationType === 'rciPoints' ? (
+                  {vacationType === "rciPoints" ? (
                     `Show Units (${calculateTotalPoints()} points)`
                   ) : (
                     `Show Units ($${getFixedPrice()})`

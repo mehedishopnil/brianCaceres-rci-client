@@ -7,7 +7,15 @@ import GuestInfo from "./GuestInfo";
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resort, startDate, endDate, unitType, price, paymentMethod } = location.state || {};
+  const {
+    resort,
+    startDate,
+    endDate,
+    unitType,
+    price,
+    points,
+    paymentMethod,
+  } = location.state || {};
   const [selectedOption, setSelectedOption] = useState(null);
   const [guestInfo, setGuestInfo] = useState(null);
 
@@ -15,9 +23,16 @@ const Checkout = () => {
     return <div>Error: No booking information provided.</div>;
   }
 
-  const { img, place_name, location: resortLocation, resort_ID, room_details, check_in_time, check_out_time } = resort;
+  const {
+    img,
+    place_name,
+    location: resortLocation,
+    resort_ID,
+    room_details,
+    check_in_time,
+    check_out_time,
+  } = resort;
 
-  // Function to get room details based on unitType
   const getRoomDetails = () => {
     if (unitType === "studio") {
       return {
@@ -38,40 +53,12 @@ const Checkout = () => {
 
   const { bath, kitchen, privacy_room_amount, sleeps_room } = getRoomDetails();
 
-  // Calculate number of nights
   const calculateNights = () => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
-  // Get points per night based on unit type
-  const getPointsPerNight = () => {
-    switch (unitType) {
-      case "studio":
-        return 1000;
-      case "1 bedroom":
-        return 1500;
-      case "2 bedroom":
-        return 2000;
-      case "3 bedroom":
-        return 2500;
-      case "4 bedroom":
-        return 3000;
-      default:
-        return 0;
-    }
-  };
-
-  // Calculate total points for the stay
-  const calculateTotalPoints = () => {
-    return calculateNights() * getPointsPerNight();
-  };
-
-  // Fixed price for all unit types
-  const fixedPrice = 379.00;
-
-  // Function to handle the continue button click
   const handleContinue = () => {
     if (selectedOption) {
       if (selectedOption === "A Guest" && !guestInfo) {
@@ -79,14 +66,13 @@ const Checkout = () => {
         return;
       }
 
-      // Prepare the data to send to the payment route
       const bookingData = {
         resort,
         startDate,
         endDate,
         unitType,
-        price: paymentMethod === 'cash' ? fixedPrice : 0,
-        points: paymentMethod === 'points' ? calculateTotalPoints() : 0,
+        price,
+        points,
         paymentMethod,
         isGuest: selectedOption === "A Guest" ? "True" : "False",
         guestInfo: selectedOption === "A Guest" ? guestInfo : null,
@@ -115,11 +101,7 @@ const Checkout = () => {
 
           <div className="mt-3 space-y-1 font-semibold text-gray-600">
             <p>
-              Travel Dates:{" "}
-              <span className="font-semibold">
-                {new Date(startDate).toLocaleDateString()} -{" "}
-                {new Date(endDate).toLocaleDateString()} ({calculateNights()} nights)
-              </span>
+              Travel Dates: <span className="font-semibold">{new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()} ({calculateNights()} nights)</span>
             </p>
             <div className="md:flex gap-5">
               <p>
@@ -140,13 +122,12 @@ const Checkout = () => {
           {paymentMethod === 'cash' ? (
             <div>
               <p className="font-semibold">Cash Payment</p>
-              <p className="font-bold">Total: ${fixedPrice.toFixed(2)} USD (flat rate)</p>
+              <p className="font-bold">Total: ${price.toFixed(2)} USD (flat rate)</p>
             </div>
           ) : (
             <div>
               <p className="font-semibold">RCI Points Payment</p>
-              <p>{getPointsPerNight()} points per night × {calculateNights()} nights</p>
-              <p className="font-bold mt-1">Total: {calculateTotalPoints()} points</p>
+              <p className="font-bold mt-1">Total: {points} points</p>
             </div>
           )}
         </div>
@@ -189,9 +170,9 @@ const Checkout = () => {
         <div className="flex justify-between font-semibold py-2 gap-10 row-span-1">
           <h1>View RCI Charges</h1>
           {paymentMethod === 'cash' ? (
-            <h1 className="text-sm">Total: <span className="text-lg">${fixedPrice.toFixed(2)}</span> USD</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">${price.toFixed(2)}</span> USD</h1>
           ) : (
-            <h1 className="text-sm">Total: <span className="text-lg">{calculateTotalPoints()}</span> RCI Points</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
           )}
         </div>
 
