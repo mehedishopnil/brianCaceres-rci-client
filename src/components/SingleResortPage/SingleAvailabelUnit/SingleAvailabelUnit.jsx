@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DateRangePicker } from "react-date-range";
 import { addDays } from "date-fns";
 import { IoIosArrowDown } from "react-icons/io";
@@ -9,6 +9,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 
 const SingleAvailableUnit = () => {
   const { user } = useContext(AuthContext);
+  const location = useLocation();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
@@ -18,6 +19,11 @@ const SingleAvailableUnit = () => {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const navigate = useNavigate();
   const currentResort = JSON.parse(localStorage.getItem("currentResort"));
+  
+  // Get vacation type from location state or localStorage
+  const vacationType = location.state?.vacationType || 
+                      currentResort?.vacationType || 
+                      'rciPoints'; // default to rciPoints
 
   if (!currentResort) {
     return <div>Error: No resort data found.</div>;
@@ -54,6 +60,7 @@ const SingleAvailableUnit = () => {
           startDate: selectionRange.startDate,
           endDate: selectionRange.endDate,
           unitType: selectedUnit,
+          vacationType: vacationType // Pass vacation type to next page
         },
       });
     } else {
@@ -70,6 +77,39 @@ const SingleAvailableUnit = () => {
       key: "selection",
     });
     setIsCalendarOpen(false);
+  };
+
+  // Points per night based on unit type
+  const getPointsPerNight = (unitType) => {
+    switch (unitType) {
+      case "studio":
+        return 1000;
+      case "1 bedroom":
+        return 1500;
+      case "2 bedroom":
+        return 2000;
+      case "3 bedroom":
+        return 2500;
+      case "4 bedroom":
+        return 3000;
+      default:
+        return 0;
+    }
+  };
+
+  // Fixed price for all unit types (for Last Call)
+  const getFixedPrice = () => 379.00;
+
+  // Calculate number of nights
+  const calculateNights = () => {
+    const start = new Date(selectionRange.startDate);
+    const end = new Date(selectionRange.endDate);
+    return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  };
+
+  // Calculate total points for stay
+  const calculateTotalPoints = () => {
+    return calculateNights() * getPointsPerNight(selectedUnit);
   };
 
   // Array of unit types for cleaner rendering
@@ -112,7 +152,9 @@ const SingleAvailableUnit = () => {
       <div className="divider"></div>
 
       <div>
-        <h1 className="text-center text-xl font-semibold"> Available Units </h1>
+        <h1 className="text-center text-xl font-semibold">
+          {vacationType === 'rciPoints' ? 'RCI Points Vacations' : 'Last Call Vacations'}
+        </h1>
         
         {/* Map through unit types for consistent rendering */}
         {unitTypes.map((unitType) => (
@@ -120,6 +162,15 @@ const SingleAvailableUnit = () => {
             <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
               {unitType.charAt(0).toUpperCase() + unitType.slice(1)}
             </h1>
+            {vacationType === 'rciPoints' ? (
+              <p className="text-lg font-semibold">
+                {getPointsPerNight(unitType)} points per night
+              </p>
+            ) : (
+              <p className="text-lg font-semibold">
+                ${getFixedPrice()} (flat rate)
+              </p>
+            )}
             <button
               className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
               onClick={() => handleDateButtonClick(unitType)}
@@ -162,7 +213,11 @@ const SingleAvailableUnit = () => {
                   className="bg-blue-500 text-white py-2 px-4 rounded flex-1"
                   onClick={handleShowUnits}
                 >
-                  Show Units
+                  {vacationType === 'rciPoints' ? (
+                    `Show Units (${calculateTotalPoints()} points)`
+                  ) : (
+                    `Show Units ($${getFixedPrice()})`
+                  )}
                 </button>
                 <button
                   className="bg-gray-500 text-white py-2 px-4 rounded flex-1"

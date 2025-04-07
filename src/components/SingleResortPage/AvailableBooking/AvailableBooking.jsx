@@ -7,10 +7,9 @@ Modal.setAppElement("#root");
 const AvailableBooking = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resort, startDate, endDate, unitType } = location.state;
+  const { resort, startDate, endDate, unitType, vacationType = 'rciPoints' } = location.state;
   const [timeLeft, setTimeLeft] = useState(8 * 60); // 8 minutes in seconds
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("cash"); // 'cash' or 'points'
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -25,38 +24,37 @@ const AvailableBooking = () => {
     return () => clearTimeout(timer);
   }, [timeLeft]);
 
-  const getPrice = (unitType) => {
-    switch (unitType) {
-      case "studio":
-        return 309.0; // Weekly price
-      case "1 bedroom":
-        return 379.0 ; // Weekly price
-      case "2 bedroom":
-        return 379.0; // Weekly price
-      case "3 bedroom":
-        return 379.0; // Weekly price
-      case "4 bedroom":
-        return 379.0; // Weekly price
-      default:
-        return 0.0;
-    }
+  // Calculate number of nights
+  const calculateNights = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
-  const getPoints = (unitType) => {
+  // Fixed price for cash payments (Last Call)
+  const getFixedPrice = () => 379.00;
+
+  // Points per night based on unit type (RCI Points)
+  const getPointsPerNight = (unitType) => {
     switch (unitType) {
       case "studio":
-        return 5500; // Total points for stay
+        return 1000;
       case "1 bedroom":
-        return 7500; // Total points for stay
+        return 1500;
       case "2 bedroom":
-        return 9500; // Total points for stay
+        return 2000;
       case "3 bedroom":
-        return 12500; // Updated to 12,500 points
+        return 2500;
       case "4 bedroom":
-        return 14000; // Updated to 14,000 points
+        return 3000;
       default:
         return 0;
     }
+  };
+
+  // Calculate total points for stay
+  const calculateTotalPoints = () => {
+    return calculateNights() * getPointsPerNight(unitType);
   };
 
   const handleBookNow = () => {
@@ -66,9 +64,10 @@ const AvailableBooking = () => {
         startDate,
         endDate,
         unitType,
-        price: paymentMethod === "cash" ? getPrice(unitType) : 0,
-        points: paymentMethod === "points" ? getPoints(unitType) : 0,
-        paymentMethod,
+        vacationType,
+        price: vacationType === 'lastCall' ? getFixedPrice() : 0,
+        points: vacationType === 'rciPoints' ? calculateTotalPoints() : 0,
+        paymentMethod: vacationType === 'lastCall' ? 'cash' : 'points'
       },
     });
   };
@@ -90,11 +89,8 @@ const AvailableBooking = () => {
 
   return (
     <div className="p-4">
-      {/* <div className="w-full text-center mb-2 text-red-500 font-semibold">
-        Time remaining: {formatTime(timeLeft)}
-      </div> */}
       <h1 className="text-center text-2xl font-semibold">
-        Available Unit (<span className="text-[#0370ad]">3+</span>){" "}
+        {vacationType === 'rciPoints' ? 'RCI Points Vacation' : 'Last Call Vacation'}
       </h1>
       <div className="flex flex-col space-y-2 justify-center items-center p-4 shadow-lg">
         <h2>{resort.place_name}</h2>
@@ -103,35 +99,20 @@ const AvailableBooking = () => {
         <div className="w-full my-4">
           <label className="block mb-2 font-medium">Payment Method:</label>
           <div className="flex flex-col space-y-2">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-radio h-5 w-5 text-[#0370ad]"
-                name="paymentMethod"
-                value="cash"
-                checked={paymentMethod === "cash"}
-                onChange={() => setPaymentMethod("cash")}
-              />
-              <span className="ml-2 text-lg">
-                Pay with Cash: ${getPrice(unitType)} USD (weekly rate)
-              </span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                className="form-radio h-5 w-5 text-[#0370ad]"
-                name="paymentMethod"
-                value="points"
-                checked={paymentMethod === "points"}
-                onChange={() => setPaymentMethod("points")}
-              />
-              <span className="ml-2 text-lg">
-                Pay with Points: {getPoints(unitType).toLocaleString()} RCI Points
-                <span className="block text-sm text-gray-600">
-                  (Total per night)
-                </span>
-              </span>
-            </label>
+            {vacationType === 'lastCall' && (
+              <div className="p-3 bg-gray-50 rounded">
+                <p className="font-semibold">Cash Payment</p>
+                <p className="text-lg">${getFixedPrice().toFixed(2)} USD (flat rate)</p>
+              </div>
+            )}
+            
+            {vacationType === 'rciPoints' && (
+              <div className="p-3 bg-gray-50 rounded">
+                <p className="font-semibold">Points Payment</p>
+                <p className="text-lg">{getPointsPerNight(unitType)} points per night</p>
+                <p className="text-lg">Total: {calculateTotalPoints()} points for {calculateNights()} nights</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -142,7 +123,7 @@ const AvailableBooking = () => {
           className="w-full text-lg bg-[#ffc445] hover:bg-[#ffbd42] text-gray-800 font-bold py-2 px-4 rounded mt-4"
           onClick={handleBookNow}
         >
-          {paymentMethod === "cash" ? "Book Now" : "Redeem Points"}
+          {vacationType === 'lastCall' ? 'Book Now' : 'Redeem Points'}
         </button>
       </div>
 
