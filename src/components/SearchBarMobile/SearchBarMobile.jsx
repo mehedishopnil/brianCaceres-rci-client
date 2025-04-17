@@ -11,7 +11,6 @@ const SearchBarMobile = () => {
     const navigate = useNavigate();
     const { allResortData } = useContext(AuthContext);
 
-
     // Load search history on mount
     useEffect(() => {
         const savedHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
@@ -34,6 +33,67 @@ const SearchBarMobile = () => {
         localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory));
     };
 
+    // Enhanced search function that prioritizes maximum matches
+    const performSearch = (query) => {
+        if (!query.trim()) return [];
+
+        const queryWords = query.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+        
+        return allResortData.map(item => {
+            let score = 0;
+            let matchedFields = [];
+            
+            // Check each query word against place_name and location
+            queryWords.forEach(word => {
+                const placeNameMatch = item.place_name.toLowerCase().includes(word);
+                const locationMatch = item.location.toLowerCase().includes(word);
+                
+                if (placeNameMatch) {
+                    score += 2; // Higher weight for place_name matches
+                    if (!matchedFields.includes('place_name')) {
+                        matchedFields.push('place_name');
+                    }
+                }
+                if (locationMatch) {
+                    score += 1; // Lower weight for location matches
+                    if (!matchedFields.includes('location')) {
+                        matchedFields.push('location');
+                    }
+                }
+                
+                // Also check resort_ID if it exists
+                if (item.resort_ID && item.resort_ID.toString().toLowerCase().includes(word)) {
+                    score += 1;
+                    if (!matchedFields.includes('resort_ID')) {
+                        matchedFields.push('resort_ID');
+                    }
+                }
+            });
+            
+            return { ...item, score, matchedFields };
+        })
+        .filter(item => item.score > 0) // Only include items with at least one match
+        .sort((a, b) => {
+            // First sort by score (descending)
+            if (b.score !== a.score) return b.score - a.score;
+            
+            // If scores are equal, prioritize items that matched more fields
+            if (b.matchedFields.length !== a.matchedFields.length) {
+                return b.matchedFields.length - a.matchedFields.length;
+            }
+            
+            // If still equal, prioritize place_name matches over location matches
+            if (b.matchedFields.includes('place_name') && !a.matchedFields.includes('place_name')) {
+                return 1;
+            }
+            if (a.matchedFields.includes('place_name') && !b.matchedFields.includes('place_name')) {
+                return -1;
+            }
+            
+            return 0;
+        });
+    };
+
     // Handle the search operation
     const handleSearch = () => {
         try {
@@ -42,12 +102,8 @@ const SearchBarMobile = () => {
             }
             setLoading(true);
 
-            // Filter based on place_name, location, or resort_ID
-            const filteredResortData = allResortData.filter(item =>
-                item.place_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (item.resort_ID && item.resort_ID.toString().toLowerCase().includes(searchQuery.toLowerCase()))
-            );
+            // Get sorted and filtered results
+            const filteredResortData = performSearch(searchQuery);
 
             // Save search query and handle navigation
             saveSearchQuery(searchQuery);
