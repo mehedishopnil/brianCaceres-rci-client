@@ -33,7 +33,7 @@ const SearchBarMobile = () => {
         localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory));
     };
 
-    // Enhanced search function that prioritizes maximum matches
+    // Enhanced search function that handles partial word matches
     const performSearch = (query) => {
         if (!query.trim()) return [];
 
@@ -41,54 +41,70 @@ const SearchBarMobile = () => {
         
         return allResortData.map(item => {
             let score = 0;
-            let matchedFields = [];
+            let matchedWords = [];
             
             // Check each query word against place_name and location
             queryWords.forEach(word => {
-                const placeNameMatch = item.place_name.toLowerCase().includes(word);
-                const locationMatch = item.location.toLowerCase().includes(word);
+                const placeNameWords = item.place_name.toLowerCase().split(/\s+/);
+                const locationWords = item.location.toLowerCase().split(/\s+/);
+                
+                // Check if word matches any part of place_name
+                const placeNameMatch = placeNameWords.some(placeWord => 
+                    placeWord.includes(word)
+                );
+                
+                // Check if word matches any part of location
+                const locationMatch = locationWords.some(locWord => 
+                    locWord.includes(word)
+                );
                 
                 if (placeNameMatch) {
                     score += 2; // Higher weight for place_name matches
-                    if (!matchedFields.includes('place_name')) {
-                        matchedFields.push('place_name');
-                    }
+                    matchedWords.push(word);
                 }
                 if (locationMatch) {
                     score += 1; // Lower weight for location matches
-                    if (!matchedFields.includes('location')) {
-                        matchedFields.push('location');
+                    if (!matchedWords.includes(word)) {
+                        matchedWords.push(word);
                     }
                 }
                 
                 // Also check resort_ID if it exists
                 if (item.resort_ID && item.resort_ID.toString().toLowerCase().includes(word)) {
                     score += 1;
-                    if (!matchedFields.includes('resort_ID')) {
-                        matchedFields.push('resort_ID');
+                    if (!matchedWords.includes(word)) {
+                        matchedWords.push(word);
                     }
                 }
             });
             
-            return { ...item, score, matchedFields };
+            return { 
+                ...item, 
+                score, 
+                matchedWordsCount: matchedWords.length,
+                matchedWords 
+            };
         })
         .filter(item => item.score > 0) // Only include items with at least one match
         .sort((a, b) => {
             // First sort by score (descending)
             if (b.score !== a.score) return b.score - a.score;
             
-            // If scores are equal, prioritize items that matched more fields
-            if (b.matchedFields.length !== a.matchedFields.length) {
-                return b.matchedFields.length - a.matchedFields.length;
+            // Then by number of matched words (descending)
+            if (b.matchedWordsCount !== a.matchedWordsCount) {
+                return b.matchedWordsCount - a.matchedWordsCount;
             }
             
-            // If still equal, prioritize place_name matches over location matches
-            if (b.matchedFields.includes('place_name') && !a.matchedFields.includes('place_name')) {
-                return 1;
-            }
-            if (a.matchedFields.includes('place_name') && !b.matchedFields.includes('place_name')) {
-                return -1;
-            }
+            // Then by whether the match was in place_name (prioritize place_name matches)
+            const aPlaceNameMatch = a.matchedWords.some(word => 
+                a.place_name.toLowerCase().includes(word)
+            );
+            const bPlaceNameMatch = b.matchedWords.some(word => 
+                b.place_name.toLowerCase().includes(word)
+            );
+            
+            if (bPlaceNameMatch && !aPlaceNameMatch) return 1;
+            if (aPlaceNameMatch && !bPlaceNameMatch) return -1;
             
             return 0;
         });
