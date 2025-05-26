@@ -255,7 +255,7 @@ const Payment = () => {
             {paymentMethod === 'cash' ? (
               <p className="font-bold mt-2">Total Price: ${price} USD + (includes tax)</p>
             ) : (
-              <p className="font-bold mt-2">Total Points: {points} RCI Points</p>
+              <p className="font-bold mt-2">Total Points: {points.toLocaleString()} RCI Points</p>
             )}
           </div>
 
@@ -265,7 +265,7 @@ const Payment = () => {
               {paymentMethod === 'cash' ? (
                 <h1>USD {price}</h1>
               ) : (
-                <h1>{points} Points</h1>
+                <h1>{points.toLocaleString()} Points</h1>
               )}
             </div>
 

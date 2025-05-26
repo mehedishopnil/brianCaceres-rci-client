@@ -143,7 +143,7 @@ const Checkout = () => {
           ) : (
             <div>
               <p className="font-semibold">RCI Points Payment</p>
-              <p className="font-bold mt-1">Total: {points} points</p>
+              <p className="font-bold mt-1">Total: {points.toLocaleString()} points</p>
             </div>
           )}
         </div>
@@ -188,7 +188,7 @@ const Checkout = () => {
           {paymentMethod === 'cash' ? (
             <h1 className="text-sm">Total: <span className="text-lg">${taxInclusivePrice.toFixed(2)}</span> USD (includes tax)</h1>
           ) : (
-            <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">{points.toLocaleString()}</span> RCI Points</h1>
           )}
         </div>
 

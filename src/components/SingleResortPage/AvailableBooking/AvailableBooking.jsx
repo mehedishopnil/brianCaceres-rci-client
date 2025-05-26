@@ -103,7 +103,7 @@ const AvailableBooking = () => {
   return (
     <div className="p-4">
       <h1 className="text-center text-2xl font-bold">
-        {vacationType === 'rciPoints' ? 'RCI Points Vacation' : 'Available Unit'}
+        {vacationType === 'rciPoints' ? 'Available Unit (with Points)' : 'Available Unit'}
       </h1>
 
       <div className="flex flex-col space-y-2 justify-center items-center p-4 shadow-lg">
@@ -124,9 +124,11 @@ const AvailableBooking = () => {
                   </p>
                 )}
                 <p className="text-base font-semibold text-gray-600">
-                  {basePoints} (base) + {weekendSurcharge} (weekend) = {totalPoints} points
+                  {basePoints} (base) + {weekendSurcharge} (weekend) 
                 </p>
-                <h1 className="text-3xl py-2 font-semibold">Total Points: {totalPoints}</h1>
+                <h1 className="text-3xl py-2 font-semibold">
+                  Total Points: {totalPoints.toLocaleString()}
+                </h1>
               </>
             )}
           </div>
