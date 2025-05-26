@@ -23,6 +23,22 @@ const Checkout = () => {
     return <div>Error: No booking information provided.</div>;
   }
 
+  // Calculate tax-inclusive prices
+  const getTaxInclusivePrice = (basePrice) => {
+    switch (basePrice) {
+      case 309:
+        return 329.08;
+      case 339:
+        return 361.02;
+      case 379:
+        return 403.63;
+      default:
+        return basePrice;
+    }
+  };
+
+  const taxInclusivePrice = price ? getTaxInclusivePrice(price) : 0;
+
   const {
     img,
     place_name,
@@ -71,7 +87,7 @@ const Checkout = () => {
         startDate,
         endDate,
         unitType,
-        price,
+        price: taxInclusivePrice, // Updated to use tax-inclusive price
         points,
         paymentMethod,
         isGuest: selectedOption === "A Guest" ? "True" : "False",
@@ -88,7 +104,7 @@ const Checkout = () => {
 
   return (
     <div className="">
-      <h1 className="text-center text-2xl font-semibold">Checkout</h1>
+      <h1 className="text-center text-3xl font-bold my-4">Checkout</h1>
       <div className="divider"></div>
       <div className="md:grid grid-cols-3 gap-4 space-y-5 md:space-y-2 p-4 shadow-lg">
         <img src={img} alt={place_name} className="col-span-1" />
@@ -122,7 +138,7 @@ const Checkout = () => {
           {paymentMethod === 'cash' ? (
             <div>
               <p className="font-semibold">Cash Payment</p>
-              <p className="font-bold">Total: ${price.toFixed(2)} USD (flat rate)</p>
+              <p className="font-bold">Total: ${taxInclusivePrice.toFixed(2)} USD (includes tax)</p>
             </div>
           ) : (
             <div>
@@ -170,7 +186,7 @@ const Checkout = () => {
         <div className="flex justify-between font-semibold py-2 gap-10 row-span-1">
           <h1>View RCI Charges</h1>
           {paymentMethod === 'cash' ? (
-            <h1 className="text-sm">Total: <span className="text-lg">${price.toFixed(2)}</span> USD</h1>
+            <h1 className="text-sm">Total: <span className="text-lg">${taxInclusivePrice.toFixed(2)}</span> USD (includes tax)</h1>
           ) : (
             <h1 className="text-sm">Total: <span className="text-lg">{points}</span> RCI Points</h1>
           )}

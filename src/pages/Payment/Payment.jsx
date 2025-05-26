@@ -253,7 +253,7 @@ const Payment = () => {
             <p>Unit Type: {unitType}</p>
             <p>Dates: {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString()} ({nights} nights)</p>
             {paymentMethod === 'cash' ? (
-              <p className="font-bold mt-2">Total Price: ${price} USD</p>
+              <p className="font-bold mt-2">Total Price: ${price} USD + (includes tax)</p>
             ) : (
               <p className="font-bold mt-2">Total Points: {points} RCI Points</p>
             )}
