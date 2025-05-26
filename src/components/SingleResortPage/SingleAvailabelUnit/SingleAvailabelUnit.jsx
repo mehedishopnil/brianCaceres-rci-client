@@ -71,22 +71,6 @@ const SingleAvailableUnit = () => {
     }
   };
 
-  // Fixed price for Last Call vacations based on unit type
-  const getFixedPrice = (unitType) => {
-    switch (unitType) {
-      case "studio":
-        return 309;
-      case "1 bedroom":
-        return 339;
-      case "2 bedroom":
-      case "3 bedroom":
-      case "4 bedroom":
-        return 379;
-      default:
-        return 0;
-    }
-  };
-
   // Calculate number of nights
   const calculateNights = () => {
     const start = new Date(selectionRange.startDate);
@@ -109,8 +93,8 @@ const SingleAvailableUnit = () => {
 
   // Check if unit should be marked as unavailable
   const isUnitUnavailable = (unitType) => {
-    // If any bedroom is selected (studio is not a bedroom), mark 3 and 4 bedrooms as unavailable
-    if (selectedUnit && !selectedUnit.includes('studio') && (unitType === '3 bedroom' || unitType === '4 bedroom')) {
+    // Mark 3 and 4 bedrooms as unavailable
+    if (unitType === '3 bedroom' || unitType === '4 bedroom') {
       return true;
     }
     return false;
@@ -124,7 +108,6 @@ const SingleAvailableUnit = () => {
 
     if (user) {
       const totalPoints = calculateTotalPoints();
-      const price = vacationType === 'lastCall' ? getFixedPrice(selectedUnit) : 0;
       
       navigate("/available-booking", {
         state: {
@@ -133,7 +116,6 @@ const SingleAvailableUnit = () => {
           endDate: selectionRange.endDate,
           unitType: selectedUnit,
           vacationType,
-          price,
           points: vacationType === 'rciPoints' ? totalPoints : 0,
           paymentMethod: vacationType === 'lastCall' ? 'cash' : 'points',
           totalPoints,
@@ -191,15 +173,6 @@ const SingleAvailableUnit = () => {
                 {unitType.charAt(0).toUpperCase() + unitType.slice(1)}
                 {unavailable && <span className="text-red-500 ml-2">(Unavailable)</span>}
               </h1>
-              {vacationType === "rciPoints" ? (
-                <p className="text-lg font-semibold">
-                  {getPointsPerNight(unitType)} points per night
-                </p>
-              ) : (
-                <p className="text-lg font-semibold">
-                  ${getFixedPrice(unitType)} (flat rate)
-                </p>
-              )}
               <button
                 className={`mt-5 border-2 py-2 px-4 sm:px-20 font-semibold rounded ${
                   unavailable 
@@ -250,7 +223,7 @@ const SingleAvailableUnit = () => {
                   {vacationType === "rciPoints" ? (
                     `Show Units (${calculateTotalPoints()} points)`
                   ) : (
-                    `Show Units ($${getFixedPrice(selectedUnit)})`
+                    `Show Units`
                   )}
                 </button>
                 <button

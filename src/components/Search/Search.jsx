@@ -10,14 +10,13 @@ const Search = () => {
   const [searchData, setSearchData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resortsCount, setResortsCount] = useState(0);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchQuery = queryParams.get("q") || "";
     setSearchTerm(searchQuery);
   }, [location.search]);
-
-  console.log(searchTerm);
 
   // Enhanced search function that handles partial word matches
   const performSearch = (query, data) => {
@@ -112,8 +111,10 @@ const Search = () => {
           // Get sorted and filtered results
           const filteredData = performSearch(searchTerm, allResortData);
           setSearchData(filteredData);
+          setResortsCount(filteredData.length);
         } else {
           setSearchData([]);
+          setResortsCount(0);
         }
       } catch (error) {
         console.error("Error fetching and filtering data:", error.message);
@@ -125,42 +126,39 @@ const Search = () => {
     fetchData();
   }, [searchTerm, allResortData]);
 
-  // Function to modify place_name
-  const modifyPlaceName = (place_name) => {
-    if (!place_name) return "";
-    // Check if the place_name contains a number followed by "Nights"
-    const regex = /\d+\s*Nights/;
-    if (regex.test(place_name)) {
-      // Replace with "3 Nights" or remove it entirely
-      return place_name.replace(regex, "3 Nights"); 
-      // Replace with "3 Nights"
-      // Alternatively, to remove it entirely:
-      // return place_name.replace(regex, "").trim();
+  // Function to modify resort data before display
+  const modifyResortData = (resort) => {
+    const modifiedResort = { ...resort };
+    
+    // Remove price rates
+    if (modifiedResort.price_rate) {
+      delete modifiedResort.price_rate;
     }
-    return place_name; // Return the original if no match
+    
+    // Mark 3 and 4 bedroom units as unavailable
+    if (modifiedResort.bedrooms) {
+      const bedrooms = parseInt(modifiedResort.bedrooms);
+      if (bedrooms === 3 || bedrooms === 4) {
+        modifiedResort.available = false;
+      }
+    }
+    
+    return modifiedResort;
   };
 
   return (
     <div className="p-4">
       <div>
-        <h1 className="text-center text-xl  md:text-2xl  my-4">
+        <h1 className="text-center text-xl md:text-2xl ">
           Search Results Found:{" "}
           <span className="font-semibold">{searchTerm}</span>
-          
         </h1>
-
-        {/* Search amount */}
-        <p className="text-lg text-center text-gray-700 mb-4">
-          {loading
-            ? "Searching..."
-            : searchTerm && (
-                <span className="font-semibold">
-                  {searchData.length} result{searchData.length !== 1 ? "s" : ""} found
-                </span>
-              )}
-        </p>
-          
-        
+        {/* Show count of resorts found */}
+        {searchTerm && (
+          <p className="text-center text-lg font-semibold mb-6">
+            {resortsCount} {resortsCount === 1 ? 'resort' : 'resorts'} match your search
+          </p>
+        )}
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <p>
@@ -172,17 +170,21 @@ const Search = () => {
             {searchData.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {searchData.map((resort) => {
-                  // Modify the place_name before passing it to ResortCard
-                  const modifiedResort = {
-                    ...resort,
-                    place_name: modifyPlaceName(resort.place_name),
-                  };
+                  const modifiedResort = modifyResortData(resort);
                   return (
                     <Link
-                      to={`/singleResortPage/${resort._id}`}
+                      to={
+                        modifiedResort.available === false 
+                          ? "#" 
+                          : `/singleResortPage/${resort._id}`
+                      }
                       key={resort._id}
                     >
-                      <ResortCard resort={modifiedResort} />
+                      <ResortCard 
+                        resort={modifiedResort} 
+                        showPoints={true} 
+                        weekendPointPremium={500}
+                      />
                     </Link>
                   );
                 })}
@@ -190,7 +192,7 @@ const Search = () => {
             ) : (
               searchTerm && (
                 <p className="text-center mt-4">
-                  No Results Found for '{searchTerm}'.
+                  No Results Found for '{searchTerm}'
                 </p>
               )
             )}
