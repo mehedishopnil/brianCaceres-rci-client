@@ -4,6 +4,39 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
+// Pricing functions moved here from SingleAvailableUnit
+const getPointsPerNight = (unitType) => {
+  switch (unitType) {
+    case "studio":
+      return 7000;
+    case "1 bedroom":
+      return 7000;
+    case "2 bedroom":
+      return 9000;
+    case "3 bedroom":
+      return 10500;
+    case "4 bedroom":
+      return 12500;
+    default:
+      return 0;
+  }
+};
+
+const getFixedPrice = (unitType) => {
+  switch (unitType) {
+    case "studio":
+      return 309;
+    case "1 bedroom":
+      return 339;
+    case "2 bedroom":
+    case "3 bedroom":
+    case "4 bedroom":
+      return 379;
+    default:
+      return 0;
+  }
+};
+
 const AvailableBooking = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,13 +46,14 @@ const AvailableBooking = () => {
     endDate,
     unitType,
     vacationType = 'rciPoints',
-    price,
-    points,
-    paymentMethod,
-    totalPoints,
-    nights,
-    pointsPerNight
-  } = location.state;
+    nights
+  } = location.state || {};
+
+  // Calculate pricing based on unit type and nights
+  const pointsPerNight = getPointsPerNight(unitType);
+  const totalPoints = pointsPerNight * nights;
+  const price = vacationType === 'lastCall' ? getFixedPrice(unitType) : 0;
+  const paymentMethod = vacationType === 'lastCall' ? 'cash' : 'points';
 
   const [timeLeft, setTimeLeft] = useState(8 * 60); // 8 minutes
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +77,7 @@ const AvailableBooking = () => {
         unitType,
         vacationType,
         price,
-        points,
+        points: totalPoints,
         paymentMethod,
         totalPoints,
         nights,
@@ -65,22 +99,26 @@ const AvailableBooking = () => {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  if (!location.state) {
+    return <div>Error: No booking data found.</div>;
+  }
+
   return (
     <div className="p-4">
-      <h1 className="text-center text-2xl font-semibold">
-        {vacationType === 'rciPoints' ? 'RCI Points Vacation' : 'Last Call Vacation'}
+      <h1 className="text-center text-2xl font-bold">
+        {vacationType === 'rciPoints' ? 'RCI Points Vacation' : 'Available Unit'}
       </h1>
 
       <div className="flex flex-col space-y-2 justify-center items-center p-4 shadow-lg">
-        <h2>{resort.place_name}</h2>
+        <h2>{resort?.place_name}</h2>
         <h2 className="text-3xl text-[#0370ad]">{unitType}</h2>
 
-        <div className="w-full my-4">
-          <label className="block mb-2 font-medium">Payment Method:</label>
+        <div className="w-full text-center my-4">
+          
           <div className="p-3 bg-gray-50 rounded">
             <p className="font-semibold capitalize">{paymentMethod} Payment</p>
             {vacationType === 'lastCall' ? (
-              <p className="text-lg">${price.toFixed(2)} USD (flat rate)</p>
+              <p className="text-lg"><span className="text-3xl font-semibold">${price.toFixed(2)}</span> USD + tax</p>
             ) : (
               <>
                 <p className="text-lg">{pointsPerNight} points per night</p>
