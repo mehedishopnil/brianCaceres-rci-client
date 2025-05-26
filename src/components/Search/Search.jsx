@@ -146,7 +146,21 @@ const Search = () => {
         <h1 className="text-center text-xl  md:text-2xl  my-4">
           Search Results Found:{" "}
           <span className="font-semibold">{searchTerm}</span>
+          
         </h1>
+
+        {/* Search amount */}
+        <p className="text-lg text-center text-gray-700 mb-4">
+          {loading
+            ? "Searching..."
+            : searchTerm && (
+                <span className="font-semibold">
+                  {searchData.length} result{searchData.length !== 1 ? "s" : ""} found
+                </span>
+              )}
+        </p>
+          
+        
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <p>
@@ -176,7 +190,7 @@ const Search = () => {
             ) : (
               searchTerm && (
                 <p className="text-center mt-4">
-                  No Results Found for '{searchTerm}'
+                  No Results Found for '{searchTerm}'.
                 </p>
               )
             )}

@@ -107,6 +107,15 @@ const SingleAvailableUnit = () => {
     "4 bedroom",
   ];
 
+  // Check if unit should be marked as unavailable
+  const isUnitUnavailable = (unitType) => {
+    // If any bedroom is selected (studio is not a bedroom), mark 3 and 4 bedrooms as unavailable
+    if (selectedUnit && !selectedUnit.includes('studio') && (unitType === '3 bedroom' || unitType === '4 bedroom')) {
+      return true;
+    }
+    return false;
+  };
+
   const handleShowUnits = () => {
     if (!currentResort) {
       console.error("Error: No currentResort data available.");
@@ -174,28 +183,37 @@ const SingleAvailableUnit = () => {
           {vacationType === "rciPoints" ? "RCI Points Vacations" : "Last Call Vacations"}
         </h1>
         
-        {unitTypes.map((unitType) => (
-          <div key={unitType} className="text-center mt-5 py-3 shadow-md">
-            <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
-              {unitType.charAt(0).toUpperCase() + unitType.slice(1)}
-            </h1>
-            {vacationType === "rciPoints" ? (
-              <p className="text-lg font-semibold">
-                {getPointsPerNight(unitType)} points per night
-              </p>
-            ) : (
-              <p className="text-lg font-semibold">
-                ${getFixedPrice(unitType)} (flat rate)
-              </p>
-            )}
-            <button
-              className="mt-5 border-2 py-2 px-4 sm:px-20 font-semibold text-[#0370ad] border-[#0370ad] rounded"
-              onClick={() => handleDateButtonClick(unitType)}
-            >
-              Select Date
-            </button>
-          </div>
-        ))}
+        {unitTypes.map((unitType) => {
+          const unavailable = isUnitUnavailable(unitType);
+          return (
+            <div key={unitType} className={`text-center mt-5 py-3 shadow-md ${unavailable ? 'opacity-50' : ''}`}>
+              <h1 className="text-3xl text-[#0370ad] bg-[#e6f8fc] py-5">
+                {unitType.charAt(0).toUpperCase() + unitType.slice(1)}
+                {unavailable && <span className="text-red-500 ml-2">(Unavailable)</span>}
+              </h1>
+              {vacationType === "rciPoints" ? (
+                <p className="text-lg font-semibold">
+                  {getPointsPerNight(unitType)} points per night
+                </p>
+              ) : (
+                <p className="text-lg font-semibold">
+                  ${getFixedPrice(unitType)} (flat rate)
+                </p>
+              )}
+              <button
+                className={`mt-5 border-2 py-2 px-4 sm:px-20 font-semibold rounded ${
+                  unavailable 
+                    ? 'bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed'
+                    : 'text-[#0370ad] border-[#0370ad] hover:bg-[#0370ad] hover:text-white'
+                }`}
+                onClick={() => !unavailable && handleDateButtonClick(unitType)}
+                disabled={unavailable}
+              >
+                {unavailable ? 'Unavailable' : 'Select Date'}
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       {isCalendarOpen && (
