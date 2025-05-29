@@ -36,7 +36,7 @@ const AvailableUnits = ({ currentResort }) => {
           </h1>
           <div className="flex flex-col justify-center items-center">
             <BiSolidHomeHeart className="text-6xl text-[#037092] my-3" />
-            <h1 className="text-2xl font-semibold text-[#037092] my-3">RCI Points Vacations</h1>
+            <h1 className="text-2xl font-semibold text-[#037092] my-3">Club Points Vacations</h1>
           </div>
         </Link>
       </div>
