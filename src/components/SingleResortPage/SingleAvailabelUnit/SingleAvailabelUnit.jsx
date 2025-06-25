@@ -62,14 +62,13 @@ const SingleAvailableUnit = () => {
   const unitTypes = [
     "studio",
     "1 bedroom",
-    "2 bedroom",
-    "3 bedroom",
-    "4 bedroom"
+    "2+ bedroom"  // Changed from "2 bedroom" to "2+ bedroom"
   ];
 
+  // Simple implementation to check if unit is unavailable
+  // You might want to replace this with actual availability logic
   const isUnitUnavailable = (unitType) => {
-    // Mark 3 and 4 bedrooms as unavailable
-    return unitType === "3 bedroom" || unitType === "4 bedroom";
+    return false; // Default to all units being available
   };
 
   const handleShowUnits = () => {
