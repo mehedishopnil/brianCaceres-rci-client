@@ -63,7 +63,7 @@ const SingleAvailableUnit = () => {
   const baseUnitTypes = [
     "studio",
     "1 bedroom",
-    vacationType === "lastCall" ? "2+ bedroom" : "2 bedroom"
+    "2 bedroom"
   ];
 
   // Additional unit types for non-rciPoints

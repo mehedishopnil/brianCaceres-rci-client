@@ -19,7 +19,7 @@ const getFixedPrice = (unitType) => {
   switch (unitType) {
     case "studio": return 309;
     case "1 bedroom": return 339;
-    case "2+ bedroom":
+    case "2 bedroom":
     case "3 bedroom":
     case "4 bedroom": return 379;
     default: return 0;
