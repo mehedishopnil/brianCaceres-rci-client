@@ -59,16 +59,25 @@ const SingleAvailableUnit = () => {
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
-  const unitTypes = [
+  // Define base unit types
+  const baseUnitTypes = [
     "studio",
     "1 bedroom",
-    "2+ bedroom",
+    "2+ bedroom"
+  ];
+
+  // Additional unit types for non-rciPoints
+  const additionalUnitTypes = [
     "3 bedroom",
     "4 bedroom"
   ];
 
+  // Combine unit types based on vacationType
+  const unitTypes = vacationType === "lastCall" 
+    ? baseUnitTypes 
+    : [...baseUnitTypes, ...additionalUnitTypes];
+
   // Simple implementation to check if unit is unavailable
-  // You might want to replace this with actual availability logic
   const isUnitUnavailable = (unitType) => {
     return false; // Default to all units being available
   };
