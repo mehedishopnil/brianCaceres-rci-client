@@ -8,7 +8,7 @@ const getPointsPerNight = (unitType) => {
   switch (unitType) {
     case "studio": return 7000;
     case "1 bedroom": return 7000;
-    case "2 bedroom": return 9000;
+    case "2+ bedroom": return 9000;
     case "3 bedroom": return 10500;
     case "4 bedroom": return 12500;
     default: return 0;
@@ -19,7 +19,7 @@ const getFixedPrice = (unitType) => {
   switch (unitType) {
     case "studio": return 309;
     case "1 bedroom": return 339;
-    case "2 bedroom":
+    case "2+ bedroom":
     case "3 bedroom":
     case "4 bedroom": return 379;
     default: return 0;
