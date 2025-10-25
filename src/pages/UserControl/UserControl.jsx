@@ -7,7 +7,7 @@ const UserControl = () => {
 
   useEffect(() => {
     // Function to remove duplicate emails
-    const removeDuplicateEmails = (users) => {
+    const removeDuplicateEmails = users => {
       const uniqueEmails = new Set();
       return users.filter(user => {
         if (uniqueEmails.has(user.email)) {
@@ -20,7 +20,9 @@ const UserControl = () => {
     };
 
     // Ensure allUsersData is an array and remove duplicates
-    const usersArray = Array.isArray(allUsersData) ? allUsersData : [allUsersData];
+    const usersArray = Array.isArray(allUsersData)
+      ? allUsersData
+      : [allUsersData];
     const uniqueUsersArray = removeDuplicateEmails(usersArray);
 
     setUniqueUsers(uniqueUsersArray);
@@ -29,6 +31,12 @@ const UserControl = () => {
   const handleRoleToggle = (email, isAdmin) => {
     // Toggle isAdmin status
     updateUser(email, !isAdmin);
+  };
+
+  const handleRemoveUser = email => {
+    // Add your remove user logic here
+    console.log('Removing user:', email);
+    // Example: removeUser(email);
   };
 
   return (
@@ -41,24 +49,43 @@ const UserControl = () => {
         {uniqueUsers.map((user, index) => {
           const { photoURL, name, email, isAdmin } = user;
           return (
-            <div key={index} className="md:w-full bg-white shadow-md rounded-lg overflow-hidden p-4">
+            <div
+              key={index}
+              className="md:w-full bg-white shadow-md rounded-lg overflow-hidden p-4"
+            >
               <div className="flex flex-col md:w-full sm:flex-row justify-between items-center mb-4">
                 <div className="flex items-center md:w-full">
-                  <img src={photoURL} alt={name} className="w-16 h-16 rounded-full mr-4" />
+                  <img
+                    src={photoURL}
+                    alt={name}
+                    className="w-16 h-16 rounded-full mr-4"
+                  />
                   <div>
                     <h2 className="text-lg font-bold">{name}</h2>
                     <p className="text-gray-500 lg:text-sm">{email}</p>
-                    <p className={`mt-2 ${isAdmin ? 'text-green-500' : 'text-blue-500'}`}>
+                    <p
+                      className={`mt-2 ${
+                        isAdmin ? 'text-green-500' : 'text-blue-500'
+                      }`}
+                    >
                       {isAdmin ? 'Admin' : 'User'}
                     </p>
                   </div>
                 </div>
-                <button
-                  className="btn mt-4 sm:mt-0"
-                  onClick={() => handleRoleToggle(email, isAdmin)}
-                >
-                  {isAdmin ? 'Make User' : 'Make Admin'}
-                </button>
+                <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
+                  <button
+                    className="btn"
+                    onClick={() => handleRoleToggle(email, isAdmin)}
+                  >
+                    {isAdmin ? 'Make User' : 'Make Admin'}
+                  </button>
+                  <button
+                    className="btn bg-red-500 hover:bg-red-600 text-white"
+                    onClick={() => handleRemoveUser(email)}
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             </div>
           );
