@@ -75,7 +75,53 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  
+const removeUser = async email => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_Link}/delete-users`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error deleting user: ${response.status} ${response.statusText} - ${errorText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log('User deleted:', result);
+
+    // Update the allUsersData state by removing the deleted user
+    setAllUsersData(prevUsers =>
+      prevUsers.filter(user => user.email !== email)
+    );
+
+    // Show success message
+    Swal.fire({
+      icon: 'success',
+      title: 'User Removed',
+      text: 'User has been successfully deleted',
+      timer: 2000,
+    });
+
+    return result;
+  } catch (error) {
+    console.error('Error removing user:', error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Failed to remove user',
+    });
+    throw error;
+  }
+};  
   
 
 // SignIn process (with email and password)
@@ -549,6 +595,7 @@ const fetchAllBookingsData = async () => {
     loading,
     user,
     updateUser,
+    removeUser,
     role,
     login,
     googleLogin,

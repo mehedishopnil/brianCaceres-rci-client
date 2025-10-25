@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../providers/AuthProvider';
+import Swal from 'sweetalert2';
 
 const UserControl = () => {
-  const { allUsersData, updateUser } = useContext(AuthContext);
+  const { allUsersData, updateUser, removeUser } = useContext(AuthContext);
   const [uniqueUsers, setUniqueUsers] = useState([]);
 
   useEffect(() => {
@@ -33,10 +34,25 @@ const UserControl = () => {
     updateUser(email, !isAdmin);
   };
 
-  const handleRemoveUser = email => {
-    // Add your remove user logic here
-    console.log('Removing user:', email);
-    // Example: removeUser(email);
+  const handleRemoveUser = async email => {
+    // Show confirmation dialog before deleting
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await removeUser(email);
+      } catch (error) {
+        console.error('Failed to remove user:', error);
+      }
+    }
   };
 
   return (
