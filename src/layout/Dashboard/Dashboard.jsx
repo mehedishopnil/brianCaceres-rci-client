@@ -111,6 +111,12 @@ const Dashboard = () => {
                   <FaHome /> Home
                 </button>
               </li>
+              <li>
+                <Link to="/profile">
+                  <FaUser />
+                  Profile
+                </Link>
+              </li>
             </ul>
           </div>
         </Transition>
