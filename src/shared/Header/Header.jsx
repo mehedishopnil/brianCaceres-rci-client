@@ -43,11 +43,7 @@ const Header = () => {
             <img src={logo} alt="Logo" className="w-12" />
           </Link>
           <div className="w-[1px] h-14 bg-white"></div>
-          <img
-            src={logo2}
-            alt=""
-            className="w-[80px]"
-          />
+          <img src={logo2} alt="" className="w-[80px]" />
         </div>
 
         {/* Desktop Menu */}
@@ -60,12 +56,7 @@ const Header = () => {
             </li>
             {user && role ? (
               <>
-                <li>
-                  <Link to="/">
-                    <p className="">TRIPS</p>
-                  </Link>
-                </li>
-                {role === "admin" ? (
+                {role === 'admin' ? (
                   <>
                     <li>
                       <Link to="/admin-panel/admin-overview">
@@ -85,19 +76,20 @@ const Header = () => {
                         <p className="">Dashboard</p>
                       </Link>
                     </li>
+
                     <li>
-                      <Link to="/notifications">
-                        <p className="">Notifications</p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/myAccount">
+                      <Link to="/profile">
                         <p className="">My Account</p>
                       </Link>
                     </li>
                     <li>
                       <Link to="/profile">
                         <p className="">Profile</p>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/notifications">
+                        <p className="">Notifications</p>
                       </Link>
                     </li>
                     <li>
@@ -115,7 +107,6 @@ const Header = () => {
                     <p className="">HOME</p>
                   </Link>
                 </li>
-                
               </>
             )}
           </ul>
@@ -167,7 +158,6 @@ const Header = () => {
         </div>
       </div>
 
-
       {/* Mobile Navbar */}
       <div className="">
         <div className="container mx-auto flex lg:hidden justify-between items-center navbar">
@@ -177,13 +167,8 @@ const Header = () => {
               <img src={logo} alt="" className="w-[42px] " />
             </Link>
             <span className="w-[1px] h-8 bg-white"></span>
-            <img
-              src={logo2}
-              alt=""
-              className="w-[60px]"
-            />
+            <img src={logo2} alt="" className="w-[60px]" />
           </div>
-
 
           {/* Mobile Dropdown */}
           <div className="flex dropdown relative">
@@ -289,14 +274,16 @@ const Header = () => {
                       </>
                     )}
                   </div>
-                      <div className="divider"></div>
+                  <div className="divider"></div>
                   <div className="flex justify-start  flex-col gap-3 ">
                     {user && role ? (
                       <>
-                        {role === "admin" ? (
+                        {role === 'admin' ? (
                           <div>
-                            
-                            <Link to="/admin-panel/admin-overview" onClick={closeMenu}>
+                            <Link
+                              to="/admin-panel/admin-overview"
+                              onClick={closeMenu}
+                            >
                               <li className="flex font-regular text-gray-600">
                                 <div className="">
                                   <FaWpforms className="text-2xl" />
@@ -403,7 +390,7 @@ const Header = () => {
             )}
           </div>
         </div>
-        <SearchBarMobile/>
+        <SearchBarMobile />
       </div>
     </div>
   );

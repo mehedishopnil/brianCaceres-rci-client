@@ -3,7 +3,7 @@ import { Link, useNavigate, Outlet } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import { HiOutlineHomeModern } from "react-icons/hi2";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
-import { FaHome, FaWpforms } from "react-icons/fa";
+import { FaHome, FaUser, FaWpforms } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import logo from "../../../public/rci-logo-white.png";
 
@@ -32,21 +32,24 @@ const Dashboard = () => {
             </Link>
           </li>
           <li>
-          <button onClick={() => handleMenuItemClick("/dashboard/my-bookings")}>
-                  <FaWpforms /> My Bookings
-                </button>
-              </li>
+            <button
+              onClick={() => handleMenuItemClick('/dashboard/my-bookings')}
+            >
+              <FaWpforms /> My Bookings
+            </button>
+          </li>
 
-              <div className="divider"></div>
+          <div className="divider"></div>
 
-              <li>
-                <button onClick={() => handleMenuItemClick("/")}>
-                  <FaHome /> Home
-                </button>
-              </li>
           <li>
-            <Link to="resort-input-form">
-            Resort Input Form
+            <button onClick={() => handleMenuItemClick('/')}>
+              <FaHome /> Home
+            </button>
+          </li>
+          <li>
+            <Link to="/profile">
+              <FaUser />
+              Profile
             </Link>
           </li>
         </ul>
@@ -77,21 +80,26 @@ const Dashboard = () => {
           <div className="bg-gray-200 p-4 absolute top-0 left-0 right-0 mt-12 z-50">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold"></h2>
-              <button onClick={toggleMobileMenu} className="text-2xl text-gray-700">
-                              <IoMdClose />
+              <button
+                onClick={toggleMobileMenu}
+                className="text-2xl text-gray-700"
+              >
+                <IoMdClose />
               </button>
             </div>
             <ul className="menu text-gray-700 font-bold text-xl">
-
               <li>
-                <button onClick={() => handleMenuItemClick("/dashboard/overview")}>
+                <button
+                  onClick={() => handleMenuItemClick('/dashboard/overview')}
+                >
                   <HiOutlineHomeModern /> Overview
                 </button>
               </li>
-              
 
-<li>
-                <button onClick={() => handleMenuItemClick("/dashboard/my-bookings")}>
+              <li>
+                <button
+                  onClick={() => handleMenuItemClick('/dashboard/my-bookings')}
+                >
                   <FaWpforms /> My Bookings
                 </button>
               </li>
@@ -99,11 +107,10 @@ const Dashboard = () => {
               <div className="divider"></div>
 
               <li>
-                <button onClick={() => handleMenuItemClick("/")}>
+                <button onClick={() => handleMenuItemClick('/')}>
                   <FaHome /> Home
                 </button>
               </li>
-
             </ul>
           </div>
         </Transition>
