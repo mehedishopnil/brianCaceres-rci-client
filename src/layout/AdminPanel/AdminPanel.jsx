@@ -63,19 +63,19 @@ const AdminPanel = () => {
 
             <li>
               <Link
-                to="/admin-panel/resort-input-form"
+                to="/admin-panel/admin-control"
                 className="flex items-center gap-2"
               >
-                <FaWpforms /> Resort Input Form
+                <RiAdminLine /> Admin Control
               </Link>
             </li>
 
             <li>
               <Link
-                to="/admin-panel/admin-control"
+                to="/admin-panel/resort-input-form"
                 className="flex items-center gap-2"
               >
-                <RiAdminLine /> Admin Control
+                <FaWpforms /> Resort Input Form
               </Link>
             </li>
 
@@ -159,22 +159,22 @@ const AdminPanel = () => {
               <li>
                 <button
                   onClick={() =>
-                    handleMenuItemClick('/admin-panel/resort-input-form')
+                    handleMenuItemClick('/admin-panel/admin-control')
                   }
                   className="flex items-center gap-2"
                 >
-                  <FaWpforms /> Resort Input Form
+                  <RiAdminLine /> Admin Control
                 </button>
               </li>
 
               <li>
                 <button
                   onClick={() =>
-                    handleMenuItemClick('/admin-panel/admin-control')
+                    handleMenuItemClick('/admin-panel/resort-input-form')
                   }
                   className="flex items-center gap-2"
                 >
-                  <RiAdminLine /> Admin Control
+                  <FaWpforms /> Resort Input Form
                 </button>
               </li>
 
