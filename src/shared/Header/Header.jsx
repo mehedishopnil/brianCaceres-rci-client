@@ -176,7 +176,7 @@ const Header = () => {
 
                   {/* User Dropdown Menu */}
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-slideDown">
+                    <div className="absolute right-0 z-50 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-slideDown">
                       <div className="p-4 border-b border-gray-100">
                         <div className="flex items-center gap-3">
                           {user.photoURL ? (
@@ -190,7 +190,7 @@ const Header = () => {
                           )}
                           <div>
                             <p className="font-semibold text-gray-900 truncate">
-                              {user.displayName || user.email}
+                              {user.name || user.email}
                             </p>
                             <p className="text-sm text-gray-500">
                               {role === 'admin' ? 'Administrator' : 'Member'}
@@ -249,13 +249,15 @@ const Header = () => {
             )}
           </div>
           {/* Mobile Menu Button - Replaced by MobileDropdown component */}
-          <MobileDropdown
-            user={user}
-            role={role}
-            signOut={signOut}
-            navItems={navItems}
-            userNavItems={userNavItems}
-          />
+          <div className='md:hidden lg:hidden'>
+            <MobileDropdown
+              user={user}
+              role={role}
+              signOut={signOut}
+              navItems={navItems}
+              userNavItems={userNavItems}
+            />
+          </div>
         </nav>
       </div>
 
