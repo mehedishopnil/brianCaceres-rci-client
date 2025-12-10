@@ -1,398 +1,267 @@
-import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import logo from "../../../public/rci-logo-white.png";
-import logo2 from "../../../public/Travel&Leisure-logo.png";
-import {
-  IoIosHelpCircleOutline,
-  IoMdNotificationsOutline,
-} from "react-icons/io";
-import {
-  FaUserCircle,
-  FaTimes,
-  FaBars,
-  FaRegUserCircle,
-  FaWpforms,
-} from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
-import { PiSignOut } from "react-icons/pi";
-import { IoHomeOutline } from "react-icons/io5";
-import { MdAccountBalanceWallet } from "react-icons/md";
-import { AuthContext } from "../../providers/AuthProvider";
-import SearchBarMobile from "../../components/SearchBarMobile/SearchBarMobile";
+import { useContext, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../../../public/rci-logo-white.png';
+import logo2 from '../../../public/Travel&Leisure-logo.png';
+import { FaUserCircle } from 'react-icons/fa';
+import { AuthContext } from '../../providers/AuthProvider';
+import SearchBarMobile from '../../components/SearchBarMobile/SearchBarMobile';
+import { IoChevronDown, IoSearch } from 'react-icons/io5';
+import { IoMdNotificationsOutline } from 'react-icons/io';
+import MobileDropdown from './MobileDropdown';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const { user, signOut, role } = useContext(AuthContext);
+  const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const navItems = [
+    { label: 'HOME', path: '/', showAlways: true },
+    { label: 'BOOK VACATION', path: '/lastCallVacation', showAlways: true },
+  ];
 
-  const closeMenu = () => {
+  const userNavItems =
+    role === 'admin'
+      ? [
+          { label: 'Admin Panel', path: '/admin-panel/admin-overview' },
+          { label: 'Profile', path: '/profile' },
+        ]
+      : [
+          { label: 'Dashboard', path: '/dashboard/overview' },
+          { label: 'My Account', path: '/profile' },
+          { label: 'Notifications', path: '/notifications' },
+          { label: 'My Favorites', path: '/myFavorites' },
+        ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
     setIsMenuOpen(false);
-  };
+    setShowUserMenu(false);
+  }, [location]);
 
+  const handleSignOut = () => {
+    signOut();
+    setShowUserMenu(false);
+  };
 
   return (
-    <div className="bg-[#037092]">
-      {/* Desktop Navbar */}
-      <div className="container mx-auto hidden md:px-10 lg:flex justify-between items-center navbar">
-        {/* Logo and Search Bar */}
-        <div className="navbar-start flex items-center gap-5">
-          <Link to="/" className="z-20">
-            <img src={logo} alt="Logo" className="w-12" />
-          </Link>
-          <div className="w-[1px] h-14 bg-white"></div>
-          <img src={logo2} alt="" className="w-[80px]" />
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-[#037092] shadow-xl' : 'bg-[#037092]'
+      }`}
+    >
+      {/* Top Bar */}
+      <div className="hidden lg:block bg-gradient-to-r from-blue-800 to-cyan-700">
+        <div className="container mx-auto px-6 py-2">
+          <div className="flex justify-between items-center text-sm text-white/90">
+            <div className="flex items-center gap-6">
+              <span>🌐 Global | EN</span>
+              <span className="hidden xl:inline">📞 1-800-RCI-VACA</span>
+              <span className="hidden xl:inline">⭐ Member Since 1974</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <a href="#" className="hover:text-white transition-colors">
+                Help Center
+              </a>
+              <span className="w-px h-4 bg-white/30"></span>
+              <a href="#" className="hover:text-white transition-colors">
+                Contact Us
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Desktop Menu */}
-        <div className="navbar-center ">
-          <ul className="menu  menu-horizontal px-1 text-white">
-            <li>
-              <Link to="/lastCallVacation">
-                <p className="">BOOK</p>
-              </Link>
-            </li>
-            {user && role ? (
+      {/* Main Navigation */}
+      <div className="container mx-auto px-4 lg:px-6">
+        <nav className="flex items-center justify-between h-16 lg:h-20">
+          {/* Left Section - Logo & Brand */}
+          <div className="flex items-center gap-4 lg:gap-6">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-4 group ml-2 lg:ml-0">
+              <div className="relative">
+                <img
+                  src={logo}
+                  alt="RCI Logo"
+                  className="w-10 lg:w-12 transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 border-2 border-white/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+              <div className="hidden lg:block w-px h-10 bg-gradient-to-b from-white/50 to-transparent"></div>
+              <img
+                src={logo2}
+                alt="Travel & Leisure"
+                className="hidden lg:block w-20 transition-opacity duration-300 group-hover:opacity-90"
+              />
+            </Link>
+          </div>
+
+          {/* Center Section - Desktop Navigation */}
+          <div className="hidden lg:flex items-center justify-center flex-1 px-8">
+            <div className="flex items-center gap-1">
+              {navItems.map(item => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative px-4 py-2 text-sm font-semibold text-white/90 hover:text-white transition-colors group ${
+                    location.pathname === item.path ? 'text-white' : ''
+                  }`}
+                >
+                  {item.label}
+                  {location.pathname === item.path && (
+                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-gradient-to-r from-cyan-300 to-white rounded-full"></span>
+                  )}
+                  <span className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Section - User Actions */}
+          <div className="flex items-center gap-3 lg:gap-4">
+            {/* Search Button */}
+            <button
+              className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors lg:hidden"
+              aria-label="Search"
+            >
+              <IoSearch className="w-5 h-5" />
+            </button>
+
+            {user ? (
               <>
-                {role === 'admin' ? (
-                  <>
-                    <li>
-                      <Link to="/admin-panel/admin-overview">
-                        <p className="">AdminPanel</p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/profile">
-                        <p className="">Profile</p>
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <Link to="/dashboard/overview">
-                        <p className="">Dashboard</p>
-                      </Link>
-                    </li>
+                {/* Notifications */}
+                <div className="relative">
+                  <button
+                    className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors relative"
+                    aria-label="Notifications"
+                  >
+                    <IoMdNotificationsOutline className="w-5 h-5 lg:w-6 lg:h-6" />
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                  </button>
+                </div>
 
-                    <li>
-                      <Link to="/profile">
-                        <p className="">My Account</p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/profile">
-                        <p className="">Profile</p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/notifications">
-                        <p className="">Notifications</p>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/myFavorites">
-                        <p className="">My Favorites</p>
-                      </Link>
-                    </li>
-                  </>
-                )}
+                {/* User Menu */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/10 transition-colors group"
+                    aria-label="User menu"
+                  >
+                    <div className="relative">
+                      {user.photoURL ? (
+                        <img
+                          src={user.photoURL}
+                          alt="Profile"
+                          className="w-8 h-8 lg:w-10 lg:h-10 rounded-full border-2 border-white/30 group-hover:border-white/50 transition-colors"
+                        />
+                      ) : (
+                        <FaUserCircle className="w-8 h-8 lg:w-10 lg:h-10 text-white/80 group-hover:text-white transition-colors" />
+                      )}
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[#037092]"></div>
+                    </div>
+                    <IoChevronDown
+                      className={`w-4 h-4 text-white/70 transition-transform duration-200 ${
+                        showUserMenu ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* User Dropdown Menu */}
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-slideDown">
+                      <div className="p-4 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                          {user.photoURL ? (
+                            <img
+                              src={user.photoURL}
+                              alt="Profile"
+                              className="w-10 h-10 rounded-full"
+                            />
+                          ) : (
+                            <FaUserCircle className="w-10 h-10 text-gray-400" />
+                          )}
+                          <div>
+                            <p className="font-semibold text-gray-900 truncate">
+                              {user.displayName || user.email}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {role === 'admin' ? 'Administrator' : 'Member'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-2">
+                        {userNavItems.map(item => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors group"
+                          >
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <span className="text-sm font-medium">
+                              {item.label}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+
+                      <div className="p-3 border-t border-gray-100 bg-gray-50">
+                        <button
+                          onClick={handleSignOut}
+                          className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <>
-                <li>
-                  <Link to="/">
-                    <p className="">HOME</p>
-                  </Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-
-        {/* User Icons */}
-        <div className="navbar-end text-white flex gap-5 items-center">
-          {user ? (
-            <>
-              <IoMdNotificationsOutline className="text-3xl" />
-
-              <Link to="/profile">
-                {user.photoURL ? (
-                  <img
-                    src={user.photoURL}
-                    alt="User Profile"
-                    className="text-3xl w-[50px] rounded-full"
-                  />
-                ) : (
-                  <FaUserCircle className="text-3xl" />
-                )}
-              </Link>
-
-              <div>
-                <button
-                  onClick={signOut}
-                  className="bg-white text-gray-700 rounded px-3 py-1"
-                >
-                  Logout
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="bg-white text-gray-700 rounded px-3 py-1"
-              >
-                Login
-              </Link>
-              <Link
-                to="/registration"
-                className="bg-white text-gray-700 rounded px-3 py-1"
-              >
-                Registration
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Mobile Navbar */}
-      <div className="">
-        <div className="container mx-auto flex lg:hidden justify-between items-center navbar">
-          <div className="space-x-4 pr-2">
-            {/* Logo */}
-            <Link to="/" className="z-20">
-              <img src={logo} alt="" className="w-[42px] " />
-            </Link>
-            <span className="w-[1px] h-8 bg-white"></span>
-            <img src={logo2} alt="" className="w-[60px]" />
-          </div>
-
-          {/* Mobile Dropdown */}
-          <div className="flex dropdown relative">
-            <div className="flex gap-1 justify-center items-center">
-              {user ? (
-                <>
-                  <Link to="/profile" className="text-white pr-3">
-                    {user.photoURL ? (
-                      <img
-                        src={user.photoURL}
-                        alt="User Profile"
-                        className="text-2xl w-[30px] rounded-full"
-                      />
-                    ) : (
-                      <FaRegUserCircle className="text-3xl text-white" />
-                    )}
-                  </Link>
-                  <PiSignOut
-                    onClick={signOut}
-                    className="text-3xl cursor-pointer text-white"
-                  />
-                </>
-              ) : (
-                <>
+                {/* Auth Buttons */}
+                <div className="hidden lg:flex items-center gap-3">
                   <Link
                     to="/login"
-                    className="text-xs text-white border rounded px-1 py-1 hover:bg-white hover:text-gray-500"
+                    className="px-5 py-2.5 text-sm font-semibold text-white hover:text-white/90 transition-colors"
                   >
-                    Login
+                    Log In
                   </Link>
                   <Link
                     to="/registration"
-                    className="text-xs text-white border rounded px-2 py-1 hover:bg-white hover:text-gray-500"
+                    className="px-5 py-2.5 bg-gradient-to-r from-white to-gray-100 text-blue-600 font-semibold rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
                   >
-                    Registration
+                    Join Now
                   </Link>
-                </>
-              )}
-            </div>
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost"
-              onClick={toggleMenu}
-            >
-              {isMenuOpen ? (
-                <FaTimes className="h-8 w-8  text-white" />
-              ) : (
-                <FaBars className="h-8 w-8  text-white" />
-              )}
-            </div>
-            {isMenuOpen && (
-              <div className="p-2">
-                <ul className="absolute right-0 menu menu-lg dropdown-content mt-5 p-2 shadow bg-white rounded-box w-screen z-10 h-fit flex flex-col">
-                  <div>
-                    <Link to="/lastCallVacation" onClick={closeMenu}>
-                      <li className="flex font-regular text-gray-600">
-                        <div className="">
-                          <img
-                            src="https://www.rci.com/static/images/content/icons-header/book.svg"
-                            alt=""
-                          />
-                          <a>BOOK</a>
-                        </div>
-                      </li>
-                    </Link>
-                    {user && role ? (
-                      <>
-                        <Link to="/" onClick={closeMenu}>
-                          <li className="flex font-regular text-gray-600">
-                            <div className="">
-                              <img
-                                src="https://www.rci.com/static/images/content/icons-header/trips.svg"
-                                alt=""
-                              />
-                              <a>TRIPS</a>
-                            </div>
-                          </li>
-                        </Link>
+                </div>
 
-                        <Link to="/" onClick={closeMenu}>
-                          <li className="flex font-regular text-gray-600">
-                            <div className="">
-                              <img
-                                src="https://www.rci.com/static/images/content/icons-header/offers.svg"
-                                alt=""
-                              />
-                              <a>DEALS</a>
-                            </div>
-                          </li>
-                        </Link>
-                      </>
-                    ) : (
-                      <>
-                        <Link to="/" onClick={closeMenu}>
-                          <li className="flex font-regular text-gray-600">
-                            <div className="">
-                              <IoHomeOutline className="text-2xl" />
-                              <a>Home</a>
-                            </div>
-                          </li>
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                  <div className="divider"></div>
-                  <div className="flex justify-start  flex-col gap-3 ">
-                    {user && role ? (
-                      <>
-                        {role === 'admin' ? (
-                          <div>
-                            <Link
-                              to="/admin-panel/admin-overview"
-                              onClick={closeMenu}
-                            >
-                              <li className="flex font-regular text-gray-600">
-                                <div className="">
-                                  <FaWpforms className="text-2xl" />
-                                  <a>AdminPanel</a>
-                                </div>
-                              </li>
-                            </Link>
-                            <Link to="/profile" onClick={closeMenu}>
-                              <li className="flex font-regular text-gray-600">
-                                <div className="">
-                                  <FaRegUserCircle className="text-2xl" />
-                                  <a>Profile</a>
-                                </div>
-                              </li>
-                            </Link>
-                          </div>
-                        ) : (
-                          <>
-                            <Link to="/dashboard/overview" onClick={closeMenu}>
-                              <li className="flex font-regular text-gray-600">
-                                <div className="">
-                                  <FaWpforms className="text-2xl" />
-                                  <a>Dashboard</a>
-                                </div>
-                              </li>
-                            </Link>
-
-                            <Link to="/" onClick={closeMenu}>
-                              <li className="flex font-regular text-gray-600">
-                                <div className="">
-                                  <IoMdNotificationsOutline className="text-3xl" />
-                                  <a>Notifications</a>
-                                </div>
-                              </li>
-                            </Link>
-
-                            <Link to="/myAccount" onClick={closeMenu}>
-                              <li className="flex font-regular text-gray-600">
-                                <div className="">
-                                  <MdAccountBalanceWallet className="text-2xl" />
-                                  <a>My Account</a>
-                                </div>
-                              </li>
-                            </Link>
-
-                            <Link to="/profile" onClick={closeMenu}>
-                              <li className="flex font-regular text-gray-600">
-                                <div className="">
-                                  <FaRegUserCircle className="text-2xl" />
-                                  <a>Profile</a>
-                                </div>
-                              </li>
-                            </Link>
-
-                            <li className="flex font-regular text-gray-600">
-                              <div className="">
-                                <FaRegHeart className="text-2xl" />
-                                <a>My Favorites</a>
-                              </div>
-                            </li>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <Link to="/login" onClick={closeMenu}>
-                          <li className="flex font-regular text-gray-600">
-                            <div className="">
-                              <FaWpforms className="text-2xl" />
-                              <a>Login</a>
-                            </div>
-                          </li>
-                        </Link>
-
-                        <Link to="/registration" onClick={closeMenu}>
-                          <li className="flex font-regular text-gray-600">
-                            <div className="">
-                              <FaRegUserCircle className="text-2xl" />
-                              <a>Registration</a>
-                            </div>
-                          </li>
-                        </Link>
-                      </>
-                    )}
-
-                    <li className="flex font-regular text-gray-600">
-                      <div className="">
-                        <IoIosHelpCircleOutline className="text-2xl" />
-                        <a>Help</a>
-                      </div>
-                    </li>
-
-                    {user ? (
-                      <li className="flex font-regular text-gray-600">
-                        <div className="">
-                          <PiSignOut className="text-2xl" />
-                          <a onClick={signOut}>Sign Out</a>
-                        </div>
-                      </li>
-                    ) : null}
-                  </div>
-                </ul>
-              </div>
+                {/* Mobile Auth Buttons - Now handled inside MobileDropdown */}
+              </>
             )}
           </div>
-        </div>
-        <SearchBarMobile />
+          {/* Mobile Menu Button - Replaced by MobileDropdown component */}
+          <MobileDropdown
+            user={user}
+            role={role}
+            signOut={signOut}
+            navItems={navItems}
+            userNavItems={userNavItems}
+          />
+        </nav>
       </div>
-    </div>
+
+      {/* Search Bar Mobile */}
+      <SearchBarMobile />
+    </header>
   );
 };
 
